@@ -1,574 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>American Flat — IT SaaS Dashboard 2026</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --blue:      #1d4ed8;
-      --blue-lt:   #3b82f6;
-      --blue-bg:   #eff6ff;
-      --green:     #15803d;
-      --green-lt:  #22c55e;
-      --green-bg:  #f0fdf4;
-      --amber:     #b45309;
-      --amber-lt:  #f59e0b;
-      --amber-bg:  #fffbeb;
-      --red:       #b91c1c;
-      --red-lt:    #ef4444;
-      --red-bg:    #fef2f2;
-      --purple:    #7c3aed;
-      --purple-lt: #a78bfa;
-      --purple-bg: #f5f3ff;
-      --slate-900: #0f172a;
-      --slate-700: #334155;
-      --slate-500: #64748b;
-      --slate-300: #cbd5e1;
-      --slate-100: #f1f5f9;
-      --slate-50:  #f8fafc;
-      --white:     #ffffff;
-      --radius:    12px;
-      --shadow:    0 1px 4px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+      color-scheme: light;
+      --blue: #1d4ed8; --blue-lt: #3b82f6; --blue-bg: #eff6ff;
+      --green: #15803d; --green-lt: #22c55e; --green-bg: #f0fdf4;
+      --amber: #b45309; --amber-lt: #f59e0b; --amber-bg: #fffbeb;
+      --red: #b91c1c; --red-lt: #ef4444; --red-bg: #fef2f2;
+      --purple: #7c3aed; --purple-bg: #f5f3ff;
+      --slate-900: #0f172a; --slate-700: #334155; --slate-500: #64748b;
+      --slate-300: #cbd5e1; --slate-200: #e2e8f0; --slate-100: #f1f5f9;
+      --white: #ffffff; --radius: 10px;
+      --shadow: 0 1px 4px rgba(0,0,0,.07), 0 4px 14px rgba(0,0,0,.05);
     }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; color: #334155; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--slate-100);
-      color: var(--slate-700);
-      min-height: 100vh;
-    }
-
-    /* ── HEADER ─────────────────────────────────────────────── */
+    /* ── HEADER ── */
     header {
       background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%);
-      padding: 32px 40px 28px;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
+      padding: 24px 32px 20px; color: white;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
     }
-    header .brand { display: flex; align-items: center; gap: 16px; }
-    header .logo-box {
-      width: 52px; height: 52px;
-      background: rgba(255,255,255,.15);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-    }
-    header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -.3px; }
-    header .sub { font-size: .85rem; color: rgba(255,255,255,.65); margin-top: 2px; }
-    header .badge {
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 999px;
-      padding: 6px 18px;
-      font-size: .8rem;
-      color: rgba(255,255,255,.85);
-    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .logo { width:46px;height:46px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px; }
+    header h1 { font-size: 1.3rem; font-weight: 700; }
+    .hdr-sub { font-size: .78rem; color: rgba(255,255,255,.65); margin-top:2px; }
+    .hdr-right { display:flex;gap:10px;align-items:center; }
+    .badge { background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:5px 14px;font-size:.75rem;color:rgba(255,255,255,.85); }
+    .refresh-btn { background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 14px;font-size:.75rem;color:white;cursor:pointer;transition:.2s; }
+    .refresh-btn:hover { background:rgba(255,255,255,.25); }
 
-    /* ── LAYOUT ──────────────────────────────────────────────── */
-    main { padding: 32px 40px; max-width: 1600px; margin: 0 auto; }
-    .section-title {
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--slate-500);
-      margin-bottom: 14px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--slate-300);
+    /* ── LOADING ── */
+    #loadingOverlay {
+      position: fixed; inset: 0; background: rgba(248,250,252,.92);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 1000; gap: 16px;
     }
+    .spinner { width:48px;height:48px;border:4px solid #e2e8f0;border-top-color:#3b82f6;border-radius:50%;animation:spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingText { font-size:.9rem;color:#64748b;font-weight:500; }
 
-    /* ── KPI CARDS ───────────────────────────────────────────── */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-    @media (max-width: 1200px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 700px)  { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    /* ── ERROR ── */
+    #errorBanner { display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:14px 20px;margin:20px 32px;color:#b91c1c;font-size:.85rem; }
 
-    .kpi {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 20px 22px;
-      box-shadow: var(--shadow);
-      border-top: 4px solid var(--slate-300);
-      position: relative;
-      overflow: hidden;
-    }
-    .kpi::after {
-      content: attr(data-icon);
-      position: absolute; right: 14px; top: 12px;
-      font-size: 26px; opacity: .18;
-    }
-    .kpi.blue   { border-top-color: var(--blue-lt); }
-    .kpi.green  { border-top-color: var(--green-lt); }
-    .kpi.amber  { border-top-color: var(--amber-lt); }
-    .kpi.red    { border-top-color: var(--red-lt); }
-    .kpi.purple { border-top-color: var(--purple-lt); }
-    .kpi.teal   { border-top-color: #14b8a6; }
+    /* ── LAYOUT ── */
+    main { padding: 24px 32px; max-width: 1500px; margin: 0 auto; }
+    .section-title { font-size:.63rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#64748b;margin-bottom:12px;padding-bottom:5px;border-bottom:1px solid #cbd5e1; }
 
-    .kpi-label { font-size: .72rem; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; }
-    .kpi-value { font-size: 1.65rem; font-weight: 800; color: var(--slate-900); letter-spacing: -.5px; line-height: 1; }
-    .kpi-sub   { font-size: .73rem; color: var(--slate-500); margin-top: 6px; }
-    .kpi-delta {
-      display: inline-flex; align-items: center; gap: 3px;
-      font-size: .72rem; font-weight: 600; padding: 2px 7px;
-      border-radius: 999px; margin-top: 6px;
-    }
-    .kpi-delta.down  { background: var(--green-bg); color: var(--green); }
-    .kpi-delta.up    { background: var(--red-bg);   color: var(--red); }
-    .kpi-delta.save  { background: var(--green-bg); color: var(--green); }
+    /* ── KPI CARDS ── */
+    .kpi-grid { display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:24px; }
+    @media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(3,1fr);}}
+    @media(max-width:620px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+    .kpi { background:#fff;border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);border-top:4px solid #cbd5e1;position:relative;overflow:hidden; }
+    .kpi::after { content:attr(data-icon);position:absolute;right:12px;top:10px;font-size:22px;opacity:.15; }
+    .kpi.blue{border-top-color:#3b82f6;} .kpi.green{border-top-color:#22c55e;}
+    .kpi.amber{border-top-color:#f59e0b;} .kpi.red{border-top-color:#ef4444;}
+    .kpi.purple{border-top-color:#a78bfa;} .kpi.teal{border-top-color:#14b8a6;}
+    .kpi-label { font-size:.62rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px; }
+    .kpi-value { font-size:1.4rem;font-weight:800;color:#0f172a;letter-spacing:-.4px;line-height:1; }
+    .kpi-sub { font-size:.65rem;color:#64748b;margin-top:5px; }
+    .kpi-delta { display:inline-flex;align-items:center;gap:2px;font-size:.65rem;font-weight:600;padding:2px 6px;border-radius:999px;margin-top:5px; }
+    .kpi-delta.down { background:#f0fdf4;color:#15803d; }
+    .kpi-delta.up   { background:#fef2f2;color:#b91c1c; }
 
-    /* ── CHARTS GRID ─────────────────────────────────────────── */
-    .charts-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
-      margin-bottom: 24px;
-    }
-    .charts-grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 24px;
-    }
-    @media (max-width: 1100px) {
-      .charts-grid, .charts-grid-3 { grid-template-columns: 1fr; }
-    }
+    /* ── SAVINGS ROW ── */
+    .savings-row { display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px; }
+    @media(max-width:800px){.savings-row{grid-template-columns:repeat(2,1fr);}}
+    .save-card { border-radius:var(--radius);padding:16px;text-align:center;border:1px solid; }
+    .save-card.green { background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#bbf7d0; }
+    .save-card.amber { background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a; }
+    .save-card.blue  { background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#bfdbfe; }
+    .save-card.purple{ background:linear-gradient(135deg,#f5f3ff,#ede9fe);border-color:#ddd6fe; }
+    .save-label { font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px; }
+    .save-card.green .save-label{color:#15803d;} .save-card.amber .save-label{color:#b45309;}
+    .save-card.blue  .save-label{color:#1d4ed8;} .save-card.purple .save-label{color:#7c3aed;}
+    .save-value { font-size:1.3rem;font-weight:800;color:#0f172a; }
+    .save-sub { font-size:.65rem;color:#64748b;margin-top:3px; }
 
-    .card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: var(--shadow);
-    }
-    .card-title {
-      font-size: .9rem;
-      font-weight: 700;
-      color: var(--slate-900);
-      margin-bottom: 4px;
-    }
-    .card-sub {
-      font-size: .75rem;
-      color: var(--slate-500);
-      margin-bottom: 18px;
-    }
-    .chart-wrap { position: relative; }
+    /* ── CHART CARDS ── */
+    .charts-grid   { display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:18px; }
+    .charts-grid-3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:18px; }
+    @media(max-width:960px){.charts-grid,.charts-grid-3{grid-template-columns:1fr;}}
+    .card { background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow); }
+    .card-title { font-size:.85rem;font-weight:700;color:#0f172a;margin-bottom:2px; }
+    .card-sub { font-size:.68rem;color:#64748b;margin-bottom:14px; }
 
-    /* ── SAVINGS HIGHLIGHT ───────────────────────────────────── */
-    .savings-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    @media (max-width: 900px) { .savings-row { grid-template-columns: repeat(2, 1fr); } }
+    /* ── PROJECTION ── */
+    .proj-bars { display:flex;flex-direction:column;gap:16px;margin-top:10px; }
+    .proj-row { display:flex;flex-direction:column;gap:5px; }
+    .proj-meta { display:flex;justify-content:space-between;font-size:.78rem; }
+    .proj-name { font-weight:600;color:#334155; }
+    .proj-amt  { font-weight:700;color:#0f172a; }
+    .proj-track { background:#f1f5f9;border-radius:999px;height:12px;overflow:hidden; }
+    .proj-fill  { height:100%;border-radius:999px; }
+    .proj-sub   { font-size:.63rem;color:#94a3b8; }
 
-    .save-card {
-      background: linear-gradient(135deg, var(--green-bg), #dcfce7);
-      border: 1px solid #bbf7d0;
-      border-radius: var(--radius);
-      padding: 20px;
-      text-align: center;
-    }
-    .save-card.amber {
-      background: linear-gradient(135deg, var(--amber-bg), #fef3c7);
-      border-color: #fde68a;
-    }
-    .save-card.blue {
-      background: linear-gradient(135deg, var(--blue-bg), #dbeafe);
-      border-color: #bfdbfe;
-    }
-    .save-card.purple {
-      background: linear-gradient(135deg, var(--purple-bg), #ede9fe);
-      border-color: #ddd6fe;
-    }
-    .save-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--green); margin-bottom: 8px; }
-    .save-card.amber .save-label { color: var(--amber); }
-    .save-card.blue  .save-label { color: var(--blue); }
-    .save-card.purple .save-label { color: var(--purple); }
-    .save-value { font-size: 1.5rem; font-weight: 800; color: var(--slate-900); }
-    .save-sub   { font-size: .72rem; color: var(--slate-500); margin-top: 4px; }
-
-    /* ── PROJECTION BAR ──────────────────────────────────────── */
-    .proj-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: var(--shadow);
-      margin-bottom: 28px;
-    }
-    .proj-bars { display: flex; flex-direction: column; gap: 20px; margin-top: 8px; }
-    .proj-row { display: flex; flex-direction: column; gap: 6px; }
-    .proj-meta {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: .82rem;
-    }
-    .proj-name { font-weight: 600; color: var(--slate-700); }
-    .proj-amt  { font-weight: 700; color: var(--slate-900); }
-    .proj-track {
-      background: var(--slate-100);
-      border-radius: 999px;
-      height: 14px;
-      overflow: hidden;
-    }
-    .proj-fill {
-      height: 100%;
-      border-radius: 999px;
-      transition: width .6s ease;
-    }
-    .proj-sub { font-size: .7rem; color: var(--slate-500); }
-
-    /* ── APP TABLE ───────────────────────────────────────────── */
-    .table-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: var(--shadow);
-      margin-bottom: 40px;
-    }
-    .table-controls {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .search-input {
-      flex: 1;
-      min-width: 200px;
-      padding: 9px 14px;
-      border: 1px solid var(--slate-300);
-      border-radius: 8px;
-      font-size: .85rem;
-      outline: none;
-      transition: border-color .2s;
-    }
-    .search-input:focus { border-color: var(--blue-lt); box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
-
-    .filter-select {
-      padding: 9px 12px;
-      border: 1px solid var(--slate-300);
-      border-radius: 8px;
-      font-size: .82rem;
-      color: var(--slate-700);
-      background: white;
-      outline: none;
-      cursor: pointer;
-    }
-    .filter-select:focus { border-color: var(--blue-lt); }
-
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-    th {
-      background: var(--slate-50);
-      text-align: left;
-      padding: 10px 14px;
-      font-size: .7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .7px;
-      color: var(--slate-500);
-      border-bottom: 2px solid var(--slate-200);
-      cursor: pointer;
-      white-space: nowrap;
-      user-select: none;
-    }
-    th:hover { background: var(--slate-100); color: var(--slate-700); }
-    th.sorted { color: var(--blue); }
-    td {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--slate-100);
-      vertical-align: middle;
-    }
-    tr:hover td { background: var(--slate-50); }
-    td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
-    td.savings-pos { color: var(--green); text-align: right; font-weight: 600; }
-    td.savings-neg { color: var(--red); text-align: right; font-weight: 600; }
-    .status-badge {
-      display: inline-block;
-      padding: 3px 9px;
-      border-radius: 999px;
-      font-size: .68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .5px;
-    }
-    .status-Active    { background: var(--green-bg);  color: var(--green); }
-    .status-Reduced   { background: var(--amber-bg);  color: var(--amber); }
-    .status-Cancelled { background: var(--red-bg);    color: var(--red); }
-    .dept-chip {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-size: .7rem;
-      font-weight: 600;
-      background: var(--slate-100);
-      color: var(--slate-600);
-    }
-    .no-results { text-align: center; padding: 40px; color: var(--slate-500); font-size: .9rem; }
-    .table-footer {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 12px; font-size: .78rem; color: var(--slate-500);
-    }
-
-    /* ── FOOTER ──────────────────────────────────────────────── */
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: .75rem;
-      color: var(--slate-400);
-      border-top: 1px solid var(--slate-200);
-    }
+    /* ── TABLE ── */
+    .table-controls { display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap; }
+    .search-input { flex:1;min-width:180px;padding:8px 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:.8rem;outline:none; }
+    .search-input:focus { border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.1); }
+    .filter-select { padding:8px 10px;border:1px solid #cbd5e1;border-radius:7px;font-size:.78rem;color:#334155;background:#fff;outline:none;cursor:pointer; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%;border-collapse:collapse;font-size:.78rem; }
+    th { background:#f8fafc;text-align:left;padding:9px 12px;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#64748b;border-bottom:2px solid #e2e8f0;cursor:pointer;white-space:nowrap;user-select:none; }
+    th:hover { background:#f1f5f9;color:#334155; }
+    td { padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle; }
+    tr:hover td { background:#f8fafc; }
+    td.num { text-align:right;font-variant-numeric:tabular-nums;font-weight:600; }
+    td.spos { color:#15803d;text-align:right;font-weight:600; }
+    td.sneg { color:#b91c1c;text-align:right;font-weight:600; }
+    .status-badge { display:inline-block;padding:2px 8px;border-radius:999px;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px; }
+    .s-Active    { background:#f0fdf4;color:#15803d; }
+    .s-Reduced   { background:#fffbeb;color:#b45309; }
+    .s-Cancelled { background:#fef2f2;color:#b91c1c; }
+    .dept-chip { display:inline-block;padding:2px 7px;border-radius:5px;font-size:.65rem;font-weight:600;background:#f1f5f9;color:#64748b; }
+    .table-footer { display:flex;justify-content:space-between;margin-top:10px;font-size:.72rem;color:#94a3b8; }
+    .no-results { text-align:center;padding:36px;color:#64748b;font-size:.85rem; }
+    footer { text-align:center;padding:16px;font-size:.7rem;color:#94a3b8;border-top:1px solid #e2e8f0;margin-top:8px; }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════ HEADER -->
+<!-- Loading overlay -->
+<div id="loadingOverlay">
+  <div class="spinner"></div>
+  <div id="loadingText">Fetching live data from Google Sheets…</div>
+</div>
+
+<!-- Error banner -->
+<div id="errorBanner"></div>
+
 <header>
   <div class="brand">
-    <div class="logo-box">📊</div>
+    <div class="logo">📊</div>
     <div>
       <h1>IT SaaS &amp; Software Dashboard</h1>
-      <div class="sub">American Flat · 2025 Full Year vs. 2026 Year-to-Date (Jan – Apr)</div>
+      <div class="hdr-sub">American Flat · 2025 Full Year vs. 2026 Year-to-Date · Live from Google Sheets</div>
     </div>
   </div>
-  <div class="badge">Last updated: May 2026</div>
+  <div class="hdr-right">
+    <div class="badge" id="lastUpdated">Loading…</div>
+    <button class="refresh-btn" onclick="loadDashboard()">↻ Refresh</button>
+  </div>
 </header>
 
 <main>
-
-  <!-- ═══════════════════════════════════════════════════════ KPI CARDS -->
   <div class="section-title">Key Performance Indicators</div>
-  <div class="kpi-grid">
+  <div class="kpi-grid" id="kpiGrid"></div>
 
-    <div class="kpi blue" data-icon="💰">
-      <div class="kpi-label">2025 Total Spend</div>
-      <div class="kpi-value">$542,695</div>
-      <div class="kpi-sub">120 active apps · full year actual</div>
-    </div>
+  <div class="section-title">Cost Savings Highlights</div>
+  <div class="savings-row" id="savingsRow"></div>
 
-    <div class="kpi green" data-icon="📅">
-      <div class="kpi-label">2026 YTD Spend (Jan–Apr)</div>
-      <div class="kpi-value">$168,771</div>
-      <div class="kpi-sub">67 active apps · 4 months actual</div>
-      <div class="kpi-delta down">▼ $3,032/mo vs 2025 avg</div>
-    </div>
-
-    <div class="kpi green" data-icon="🏆">
-      <div class="kpi-label">Annual Savings YTD</div>
-      <div class="kpi-value">$87,019</div>
-      <div class="kpi-sub">Reduction in contracted annual spend</div>
-    </div>
-
-    <div class="kpi amber" data-icon="📈">
-      <div class="kpi-label">2026 Full-Year Projection</div>
-      <div class="kpi-value">$506,316</div>
-      <div class="kpi-sub">Based on $42,193 / mo average</div>
-      <div class="kpi-delta save">▼ $36,379 vs 2025</div>
-    </div>
-
-    <div class="kpi red" data-icon="🚫">
-      <div class="kpi-label">Apps Cancelled</div>
-      <div class="kpi-value">54</div>
-      <div class="kpi-sub">$53,948 in 2025 spend eliminated</div>
-    </div>
-
-    <div class="kpi purple" data-icon="✂️">
-      <div class="kpi-label">Contract Savings</div>
-      <div class="kpi-value">$33,070</div>
-      <div class="kpi-sub">Annual contract rate reductions</div>
-    </div>
-
-  </div>
-
-  <!-- ═══════════════════════════════════════════════ SAVINGS HIGHLIGHT -->
-  <div class="section-title">Cost Savings Summary</div>
-  <div class="savings-row">
-    <div class="save-card green">
-      <div class="save-label">Monthly Spend Reduction</div>
-      <div class="save-value">$3,032</div>
-      <div class="save-sub">Per month vs. 2025 average ($45,225 → $42,193)</div>
-    </div>
-    <div class="save-card amber">
-      <div class="save-label">Apps Streamlined</div>
-      <div class="save-value">120 → 67</div>
-      <div class="save-sub">44% reduction in active applications</div>
-    </div>
-    <div class="save-card blue">
-      <div class="save-label">2025 Spend Eliminated</div>
-      <div class="save-value">$53,948</div>
-      <div class="save-sub">From cancelled subscriptions</div>
-    </div>
-    <div class="save-card purple">
-      <div class="save-label">Projected Annual Saving</div>
-      <div class="save-value">$36,379</div>
-      <div class="save-sub">2026 full-year projection vs. 2025 actual</div>
-    </div>
-  </div>
-
-  <!-- ════════════════════════════════════════════════ TREND + DEPT PIE -->
   <div class="section-title">Spend Trends</div>
   <div class="charts-grid">
-
     <div class="card">
       <div class="card-title">Monthly Spend — 2025 vs. 2026</div>
-      <div class="card-sub">2025 full year actuals · 2026 Jan–Apr actuals (dashed = 2026 projection)</div>
-      <div class="chart-wrap" style="height:280px">
-        <canvas id="trendChart"></canvas>
-      </div>
+      <div class="card-sub">2025 full-year actuals · 2026 actuals + projected (amber dashed)</div>
+      <div style="position:relative;height:260px"><canvas id="trendChart"></canvas></div>
     </div>
-
     <div class="card">
-      <div class="card-title">2026 YTD Spend by Department</div>
-      <div class="card-sub">Jan–Apr 2026 actual ($168,771 total)</div>
-      <div class="chart-wrap" style="height:280px">
-        <canvas id="deptPieChart"></canvas>
-      </div>
+      <div class="card-title">2026 YTD by Department</div>
+      <div class="card-sub" id="deptPieSub">Year-to-date actual spend</div>
+      <div style="position:relative;height:260px"><canvas id="deptPieChart"></canvas></div>
     </div>
-
   </div>
 
-  <!-- ════════════════════════════════════════════ TOP APPS + DEPT BAR -->
   <div class="charts-grid">
-
     <div class="card">
-      <div class="card-title">Top 10 Applications — 2025 Spend</div>
-      <div class="card-sub">Full year 2025 actual spend</div>
-      <div class="chart-wrap" style="height:300px">
-        <canvas id="top10Chart"></canvas>
-      </div>
+      <div class="card-title">Top 10 Applications — 2025 Full Year</div>
+      <div class="card-sub">Ranked by annual actual spend</div>
+      <div style="position:relative;height:280px"><canvas id="top10Chart"></canvas></div>
     </div>
-
     <div class="card">
-      <div class="card-title">Department Spend — 2025 vs. 2026 YTD Annualized</div>
-      <div class="card-sub">2026 YTD × 3 for rough annual comparison</div>
-      <div class="chart-wrap" style="height:300px">
-        <canvas id="deptBarChart"></canvas>
-      </div>
+      <div class="card-title">Department Spend — 2025 vs. 2026 Annualized</div>
+      <div class="card-sub">2026 YTD annualized × 3 for comparison</div>
+      <div style="position:relative;height:280px"><canvas id="deptBarChart"></canvas></div>
     </div>
-
   </div>
 
-  <!-- ══════════════════════════════════════════════════ APP STATUS PIE -->
   <div class="charts-grid-3">
-
     <div class="card">
-      <div class="card-title">Application Status Breakdown — 2026</div>
-      <div class="card-sub">Active vs. Reduced vs. Cancelled</div>
-      <div class="chart-wrap" style="height:240px">
-        <canvas id="statusChart"></canvas>
-      </div>
+      <div class="card-title">App Status Breakdown</div>
+      <div class="card-sub">Active / Reduced / Cancelled — 2026</div>
+      <div style="position:relative;height:220px"><canvas id="statusChart"></canvas></div>
     </div>
-
     <div class="card">
-      <div class="card-title">2026 Monthly Spend Breakdown</div>
-      <div class="card-sub">Actual spend Jan–Apr 2026 by month</div>
-      <div class="chart-wrap" style="height:240px">
-        <canvas id="monthly2026Chart"></canvas>
-      </div>
+      <div class="card-title">2026 Monthly Actual Spend</div>
+      <div class="card-sub">Month-by-month actuals</div>
+      <div style="position:relative;height:220px"><canvas id="monthly2026Chart"></canvas></div>
     </div>
-
     <div class="card">
-      <div class="card-title">Top 5 Active Apps — 2026 YTD</div>
-      <div class="card-sub">Highest actual spend Jan–Apr 2026</div>
-      <div class="chart-wrap" style="height:240px">
-        <canvas id="top5_2026Chart"></canvas>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ═══════════════════════════════════════════════ SPEND PROJECTION -->
-  <div class="section-title">Spend Projections &amp; Comparison</div>
-  <div class="proj-card">
-    <div class="card-title" style="margin-bottom:6px">2026 Full-Year Projection vs. 2025 Actual</div>
-    <div class="card-sub" style="margin-bottom:0">Projection based on Jan–Apr 2026 actual average of $42,193/month</div>
-    <div class="proj-bars">
-      <div class="proj-row">
-        <div class="proj-meta">
-          <span class="proj-name">2025 Actual Total</span>
-          <span class="proj-amt">$542,695</span>
-        </div>
-        <div class="proj-track"><div class="proj-fill" style="width:100%;background:#3b82f6;"></div></div>
-        <div class="proj-sub">Baseline — 120 apps · 12 months</div>
-      </div>
-      <div class="proj-row">
-        <div class="proj-meta">
-          <span class="proj-name">2026 YTD Actual (Jan–Apr)</span>
-          <span class="proj-amt">$168,771</span>
-        </div>
-        <div class="proj-track"><div class="proj-fill" style="width:31.1%;background:#22c55e;"></div></div>
-        <div class="proj-sub">31.1% of 2025 baseline · 4 of 12 months completed</div>
-      </div>
-      <div class="proj-row">
-        <div class="proj-meta">
-          <span class="proj-name">2026 Projected Full Year</span>
-          <span class="proj-amt">$506,316</span>
-        </div>
-        <div class="proj-track"><div class="proj-fill" style="width:93.3%;background:#f59e0b;"></div></div>
-        <div class="proj-sub">93.3% of 2025 baseline · projected $36,379 savings</div>
-      </div>
-      <div class="proj-row">
-        <div class="proj-meta">
-          <span class="proj-name">Operations (Largest Dept) — 2026 Annualized</span>
-          <span class="proj-amt">~$212,583</span>
-        </div>
-        <div class="proj-track"><div class="proj-fill" style="width:39.2%;background:#7c3aed;"></div></div>
-        <div class="proj-sub">$70,861 YTD × 3 — vs. $222,854 in 2025 (saves ~$10,271)</div>
-      </div>
-      <div class="proj-row">
-        <div class="proj-meta">
-          <span class="proj-name">Finance Dept — 2026 Annualized</span>
-          <span class="proj-amt">~$90,001</span>
-        </div>
-        <div class="proj-track"><div class="proj-fill" style="width:16.6%;background:#14b8a6;"></div></div>
-        <div class="proj-sub">$30,000 YTD × 3 — vs. $67,483 in 2025 (saves ~$22,482)</div>
-      </div>
+      <div class="card-title">Top 5 Apps — 2026 YTD</div>
+      <div class="card-sub">Highest year-to-date spend</div>
+      <div style="position:relative;height:220px"><canvas id="top5Chart"></canvas></div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════ APP TABLE -->
+  <div class="section-title">Spend Projections</div>
+  <div class="card" style="margin-bottom:22px">
+    <div class="card-title" style="margin-bottom:4px">2026 Full-Year Projection vs. 2025 Actual</div>
+    <div class="card-sub" style="margin-bottom:0" id="projSubtitle">Based on average monthly spend</div>
+    <div class="proj-bars" id="projBars"></div>
+  </div>
+
   <div class="section-title">All Applications — Searchable &amp; Filterable</div>
-  <div class="table-card">
+  <div class="card" style="margin-bottom:32px">
     <div class="table-controls">
-      <input type="text" class="search-input" id="searchInput" placeholder="🔍  Search by application name…" oninput="filterTable()" />
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search application name…" oninput="filterTable()"/>
       <select class="filter-select" id="deptFilter" onchange="filterTable()">
         <option value="">All Departments</option>
-        <option value="AMF">AMF</option>
-        <option value="Operations">Operations</option>
-        <option value="Finance">Finance</option>
-        <option value="HR">HR</option>
-        <option value="AMZ Sales">AMZ Sales</option>
-        <option value="Design">Design</option>
-        <option value="IT">IT</option>
-        <option value="Data Team">Data Team</option>
       </select>
       <select class="filter-select" id="statusFilter" onchange="filterTable()">
         <option value="">All Statuses</option>
-        <option value="Active">Active</option>
-        <option value="Reduced">Reduced</option>
-        <option value="Cancelled">Cancelled</option>
+        <option>Active</option><option>Reduced</option><option>Cancelled</option>
       </select>
-      <select class="filter-select" id="sortField" onchange="filterTable()">
+      <select class="filter-select" id="sortSel" onchange="filterTable()">
         <option value="spend2025">Sort: 2025 Spend ↓</option>
         <option value="spend2026">Sort: 2026 YTD ↓</option>
         <option value="savings">Sort: Savings ↓</option>
         <option value="name">Sort: Name A–Z</option>
       </select>
     </div>
-
     <div class="table-wrap">
-      <table id="appTable">
+      <table>
         <thead>
           <tr>
             <th onclick="setSortField('name')">Application</th>
@@ -577,7 +237,7 @@
             <th>Status</th>
             <th onclick="setSortField('spend2025')" style="text-align:right">2025 Actual</th>
             <th onclick="setSortField('spend2026')" style="text-align:right">2026 YTD</th>
-            <th onclick="setSortField('savings')" style="text-align:right">YTD Savings</th>
+            <th onclick="setSortField('savings')" style="text-align:right">Est. Annual Savings</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -585,404 +245,471 @@
       <div id="noResults" class="no-results" style="display:none">No applications match your filters.</div>
     </div>
     <div class="table-footer">
-      <span id="tableCount">Loading…</span>
+      <span id="tableCount"></span>
       <span>Click column headers to sort</span>
     </div>
   </div>
-
 </main>
 
-<footer>
-  American Flat IT SaaS Dashboard · Data sourced from IT Binder 2026 · Generated May 2026
-</footer>
+<footer id="footerEl">American Flat IT SaaS Dashboard · Live data from Google Sheets</footer>
 
 <script>
-// ═══════════════════════════════════════════════════════ DATA
+// ═══════════════════════════════ CONFIGURATION ════════════════════════════
+// Paste your Google Apps Script Web App URL here after deploying:
+const WEB_APP_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+// ═════════════════════════════════════════════════════════════════════════
 
-const apps = [
-  { name:"180 Marketing",              dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:0,        s26:5075.00 },
-  { name:"1Password",                  dept:"AMF",        billing:"Annual",  status:"Active",    s25:7366.93,  s26:2418.84 },
-  { name:"ACE Cloud Hosting",          dept:"Finance",    billing:"Monthly", status:"Reduced",   s25:7421.53,  s26:3088.26 },
-  { name:"Acenda",                     dept:"Operations", billing:"Monthly", status:"Active",    s25:14274.13, s26:5996.00 },
-  { name:"Ad Badger",                  dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:6515.33,  s26:4290.00 },
-  { name:"Adobe Creative",             dept:"Design",     billing:"Monthly", status:"Reduced",   s25:7758.35,  s26:1754.74 },
-  { name:"Airtable",                   dept:"AMF",        billing:"Monthly", status:"Reduced",   s25:15617.82, s26:3916.29 },
-  { name:"Amazon Web Services",        dept:"Operations", billing:"Monthly", status:"Active",    s25:1865.32,  s26:411.38  },
-  { name:"Anthropic (Claude Team)",    dept:"AMF",        billing:"Monthly", status:"Active",    s25:664.17,   s26:2387.84 },
-  { name:"Autodesk",                   dept:"Design",     billing:"Annual",  status:"Cancelled", s25:2721.88,  s26:0       },
-  { name:"Avalara",                    dept:"Finance",    billing:"Monthly", status:"Active",    s25:0,        s26:74.10   },
-  { name:"BambooHR",                   dept:"HR",         billing:"Monthly", status:"Reduced",   s25:15360.87, s26:3231.11 },
-  { name:"Canva",                      dept:"Design",     billing:"Monthly", status:"Active",    s25:101.88,   s26:16.98   },
-  { name:"ChatGPT",                    dept:"AMF",        billing:"Monthly", status:"Active",    s25:5879.84,  s26:1197.89 },
-  { name:"ClickUp",                    dept:"AMF",        billing:"Monthly", status:"Cancelled", s25:11897.66, s26:2004.50 },
-  { name:"Cleverbridge (Keyshot)",     dept:"Design",     billing:"Annual",  status:"Cancelled", s25:3070.28,  s26:0       },
-  { name:"Commercehub",                dept:"Operations", billing:"Monthly", status:"Active",    s25:5215.50,  s26:0       },
-  { name:"Corporate Filings LLC",      dept:"Finance",    billing:"Monthly", status:"Active",    s25:0,        s26:1869.00 },
-  { name:"DataDive",                   dept:"AMZ Sales",  billing:"Monthly", status:"Cancelled", s25:1413.00,  s26:0       },
-  { name:"Dropbox",                    dept:"AMF",        billing:"Monthly", status:"Reduced",   s25:3960.00,  s26:1080.00 },
-  { name:"Endicia",                    dept:"Operations", billing:"Monthly", status:"Active",    s25:267.78,   s26:133.89  },
-  { name:"Eversign",                   dept:"AMF",        billing:"Monthly", status:"Reduced",   s25:275.76,   s26:101.93  },
-  { name:"Ezcom / Lingo",              dept:"Finance",    billing:"Monthly", status:"Cancelled", s25:6847.67,  s26:0       },
-  { name:"Feedback Five (ecomengine)", dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:828.00,   s26:276.00  },
-  { name:"Figma",                      dept:"AMZ Sales",  billing:"Annual",  status:"Reduced",   s25:195.98,   s26:27.23   },
-  { name:"Flickr",                     dept:"Design",     billing:"Annual",  status:"Active",    s25:79.46,    s26:29.76   },
-  { name:"Getida",                     dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:210.13,   s26:721.14  },
-  { name:"Github",                     dept:"Data Team",  billing:"Monthly", status:"Active",    s25:172.62,   s26:109.05  },
-  { name:"GoDaddy",                    dept:"IT",         billing:"Monthly", status:"Active",    s25:179.56,   s26:26.00   },
-  { name:"Google Cloud",               dept:"AMF",        billing:"Monthly", status:"Active",    s25:2308.17,  s26:1690.48 },
-  { name:"Google Fi",                  dept:"AMF",        billing:"Monthly", status:"Reduced",   s25:955.29,   s26:294.16  },
-  { name:"Google Workspace",           dept:"AMF",        billing:"Monthly", status:"Active",    s25:22776.65, s26:8188.54 },
-  { name:"Google Workspace (Nova Eats)",dept:"AMF",       billing:"Monthly", status:"Active",    s25:248.55,   s26:135.19  },
-  { name:"Helium 10",                  dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:2748.00,  s26:916.00  },
-  { name:"Higgsfield",                 dept:"Design",     billing:"Monthly", status:"Active",    s25:0,        s26:58.00   },
-  { name:"Hostwinds (Subscription)",   dept:"IT",         billing:"Monthly", status:"Active",    s25:371.88,   s26:131.62  },
-  { name:"Hubspot",                    dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:0,        s26:16.33   },
-  { name:"Intuit Quickbooks",          dept:"Finance",    billing:"Monthly", status:"Active",    s25:35801.42, s26:21537.85},
-  { name:"Jotform",                    dept:"HR",         billing:"Monthly", status:"Cancelled", s25:640.18,   s26:0       },
-  { name:"Keepa",                      dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:2746.14,  s26:1894.95 },
-  { name:"Klaviyo",                    dept:"AMZ Sales",  billing:"Monthly", status:"Reduced",   s25:402.85,   s26:925.46  },
-  { name:"Later",                      dept:"AMZ Sales",  billing:"Monthly", status:"Reduced",   s25:408.27,   s26:54.44   },
-  { name:"LinkedIn",                   dept:"HR",         billing:"Monthly", status:"Reduced",   s25:13327.38, s26:76.20   },
-  { name:"Loom",                       dept:"AMF",        billing:"Monthly", status:"Reduced",   s25:1540.29,  s26:495.00  },
-  { name:"Luminous Software Solutions",dept:"Operations", billing:"Monthly", status:"Active",    s25:40333.82, s26:18200.00},
-  { name:"Microsoft 365",              dept:"AMF",        billing:"Monthly", status:"Active",    s25:17693.73, s26:6279.43 },
-  { name:"My Read Receipts",           dept:"Operations", billing:"Monthly", status:"Active",    s25:12.00,    s26:11.23   },
-  { name:"NordVPN",                    dept:"AMF",        billing:"Annual",  status:"Active",    s25:162.72,   s26:463.60  },
-  { name:"Notion Labs",                dept:"AMF",        billing:"Monthly", status:"Reduced",   s25:12004.11, s26:2959.42 },
-  { name:"OpenPhone",                  dept:"AMF",        billing:"Monthly", status:"Reduced",   s25:2225.98,  s26:1442.12 },
-  { name:"PierPass LLC",               dept:"Design",     billing:"Monthly", status:"Active",    s25:7758.92,  s26:1077.28 },
-  { name:"PortCheck LLC",              dept:"Design",     billing:"Monthly", status:"Active",    s25:2030.00,  s26:270.00  },
-  { name:"Right Networks",             dept:"Finance",    billing:"Monthly", status:"Reduced",   s25:1417.58,  s26:0       },
-  { name:"Scraper API",                dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:1843.00,  s26:1196.00 },
-  { name:"Shipstation",                dept:"Operations", billing:"Monthly", status:"Reduced",   s25:35491.96, s26:1997.32 },
-  { name:"Shopify",                    dept:"AMF",        billing:"Monthly", status:"Active",    s25:2516.35,  s26:2107.56 },
-  { name:"Siliconwhiz (Syncario)",     dept:"Finance",    billing:"Monthly", status:"Cancelled", s25:6820.00,  s26:0       },
-  { name:"SimplyVAT.com",              dept:"Finance",    billing:"Monthly", status:"Active",    s25:0,        s26:531.49  },
-  { name:"Slack",                      dept:"AMF",        billing:"Monthly", status:"Reduced",   s25:9763.41,  s26:1850.83 },
-  { name:"Stedi",                      dept:"Operations", billing:"Monthly", status:"Active",    s25:55050.28, s26:37331.62},
-  { name:"Supabase",                   dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:25.00,    s26:75.00   },
-  { name:"Surpass EDI",                dept:"Operations", billing:"Monthly", status:"Cancelled", s25:8000.00,  s26:0       },
-  { name:"Surpass Solutions",          dept:"Operations", billing:"Monthly", status:"Reduced",   s25:57790.00, s26:5963.12 },
-  { name:"Tally.so",                   dept:"Finance",    billing:"Monthly", status:"Active",    s25:348.00,   s26:58.00   },
-  { name:"Taxjar",                     dept:"Finance",    billing:"Monthly", status:"Active",    s25:7224.92,  s26:2516.64 },
-  { name:"Traveling Mailbox",          dept:"Finance",    billing:"Monthly", status:"Active",    s25:1009.36,  s26:141.40  },
-  { name:"Upwork",                     dept:"HR",         billing:"Monthly", status:"Reduced",   s25:9270.52,  s26:101.38  },
-  { name:"Vercel",                     dept:"AMZ Sales",  billing:"Monthly", status:"Active",    s25:0,        s26:87.12   },
-  { name:"Zapier",                     dept:"AMZ Sales",  billing:"Monthly", status:"Reduced",   s25:931.50,   s26:340.49  },
-  { name:"Zendesk",                    dept:"Operations", billing:"Monthly", status:"Reduced",   s25:3974.35,  s26:817.01  },
-];
-
-// Compute savings column (positive = money saved = s25 > s26 per period)
-// YTD savings: s26 is 4 months; if active in 2025, annualize comparison
-apps.forEach(a => {
-  const avg25 = a.s25 / 12;
-  const avg26 = a.s26 / 4;
-  a.mthSavings = avg25 - avg26; // positive = saving money
-  a.label = a.mthSavings >= 0
-    ? `$${(a.mthSavings*12).toLocaleString('en-US',{maximumFractionDigits:0})}`
-    : `-$${Math.abs(a.mthSavings*12).toLocaleString('en-US',{maximumFractionDigits:0})}`;
-});
-
-// ═══════════════════════════════════════════════════ CHART.JS COLORS
-const PALETTE = {
-  blue:   'rgba(59,130,246,',
-  green:  'rgba(34,197,94,',
-  amber:  'rgba(245,158,11,',
-  red:    'rgba(239,68,68,',
-  purple: 'rgba(167,139,250,',
-  teal:   'rgba(20,184,166,',
+const DEPT_COLORS = {
+  'Operations':'#3b82f6','AMF':'#22c55e','Finance':'#f59e0b',
+  'AMZ Sales':'#ef4444','HR':'#a78bfa','Design':'#14b8a6',
+  'IT':'#64748b','Data Team':'#f97316','Other':'#94a3b8'
 };
-const deptColors = {
-  'Operations': '#3b82f6',
-  'AMF':        '#22c55e',
-  'Finance':    '#f59e0b',
-  'HR':         '#a78bfa',
-  'AMZ Sales':  '#ef4444',
-  'Design':     '#14b8a6',
-  'IT':         '#64748b',
-  'Data Team':  '#f97316',
-  'Other':      '#94a3b8',
-};
+const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS_LONG  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-// ═══════════════════════════════════════════════════ CHART 1: Trend
-(function() {
-  const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const data25 = [32329,54524,45934,53522,36100,28222,56703,61382,46716,47197,47986,32079];
-  const data26Act = [45337,33404,33066,56964,null,null,null,null,null,null,null,null];
-  const proj26 = [null,null,null,56964,42193,42193,42193,42193,42193,42193,42193,42193];
+let CHARTS = {};
+let ALL_APPS = [];
+let sortDir = -1, currentSort = 'spend2025';
 
-  new Chart(document.getElementById('trendChart'), {
+// ── Helpers ───────────────────────────────────────────────────────────────
+function fmt(v)  { return v > 0 ? '$' + v.toLocaleString('en-US',{maximumFractionDigits:0}) : '$—'; }
+function fmtK(v) { return '$' + (v/1000).toFixed(0) + 'K'; }
+function pct(v, t) { return t > 0 ? (v/t*100).toFixed(1)+'%' : '—'; }
+
+// ── Main fetch ────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+  document.getElementById('errorBanner').style.display = 'none';
+  document.getElementById('loadingText').textContent = 'Fetching live data from Google Sheets…';
+
+  // Destroy old charts
+  Object.values(CHARTS).forEach(c => c && c.destroy());
+  CHARTS = {};
+
+  try {
+    let data;
+
+    if (WEB_APP_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+      // No URL yet — use the last known static data so the dashboard still works
+      data = getStaticData();
+      document.getElementById('lastUpdated').textContent = 'Static data — set up Apps Script to go live';
+    } else {
+      const res = await fetch(WEB_APP_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      data = await res.json();
+      if (data.error) throw new Error(data.error);
+      const d = new Date(data.generatedAt);
+      document.getElementById('lastUpdated').textContent =
+        'Live · Updated ' + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    }
+
+    renderAll(data);
+  } catch (e) {
+    const eb = document.getElementById('errorBanner');
+    eb.style.display = 'block';
+    eb.textContent = '⚠️ Could not load live data: ' + e.message +
+      '. Check your Apps Script URL in the HTML file.';
+  } finally {
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
+}
+
+// ── Render everything ─────────────────────────────────────────────────────
+function renderAll(d) {
+  const { kpis, monthly26, monthly25, dept25, dept26, top10_25, top5_26, apps } = d;
+  ALL_APPS = apps;
+
+  const mthsActive = monthly26.filter(v => v > 0).length;
+  const mthLabels  = MONTHS_LONG.slice(0, mthsActive);
+
+  // ── KPI Cards
+  const avg25 = kpis.total25 / 12;
+  const savPerMo = avg25 - kpis.avg26;
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi blue" data-icon="💰">
+      <div class="kpi-label">2025 Total Spend</div>
+      <div class="kpi-value">${fmt(kpis.total25)}</div>
+      <div class="kpi-sub">Full year actual spend</div>
+    </div>
+    <div class="kpi green" data-icon="📅">
+      <div class="kpi-label">2026 YTD (${mthLabels.join('–')})</div>
+      <div class="kpi-value">${fmt(kpis.ytd26)}</div>
+      <div class="kpi-sub">${kpis.activeCount + kpis.reducedCount} active apps</div>
+      <div class="kpi-delta ${savPerMo>=0?'down':'up'}">${savPerMo>=0?'▼':'▲'} ${fmt(Math.abs(savPerMo))}/mo vs 2025</div>
+    </div>
+    <div class="kpi green" data-icon="📈">
+      <div class="kpi-label">2026 Full-Year Projection</div>
+      <div class="kpi-value">${fmt(kpis.proj26)}</div>
+      <div class="kpi-sub">At ${fmt(kpis.avg26)}/mo average</div>
+      <div class="kpi-delta ${kpis.savedVs25>=0?'down':'up'}">${kpis.savedVs25>=0?'▼':'▲'} ${fmt(Math.abs(kpis.savedVs25))} vs 2025</div>
+    </div>
+    <div class="kpi amber" data-icon="✂️">
+      <div class="kpi-label">Monthly Spend Savings</div>
+      <div class="kpi-value">${fmt(Math.abs(savPerMo))}/mo</div>
+      <div class="kpi-sub">${fmt(avg25)} (2025 avg) → ${fmt(kpis.avg26)} (2026 avg)</div>
+    </div>
+    <div class="kpi red" data-icon="🚫">
+      <div class="kpi-label">Apps Cancelled</div>
+      <div class="kpi-value">${kpis.cancelledCount}</div>
+      <div class="kpi-sub">${kpis.reducedCount} reduced · ${kpis.activeCount} still active</div>
+    </div>
+    <div class="kpi purple" data-icon="📊">
+      <div class="kpi-label">App Portfolio</div>
+      <div class="kpi-value">${kpis.activeCount + kpis.reducedCount}</div>
+      <div class="kpi-sub">Active in 2026 (was ${kpis.activeCount + kpis.reducedCount + kpis.cancelledCount} in 2025)</div>
+    </div>
+  `;
+
+  // ── Savings Row
+  const appWas = kpis.activeCount + kpis.reducedCount + kpis.cancelledCount;
+  const appNow = kpis.activeCount + kpis.reducedCount;
+  document.getElementById('savingsRow').innerHTML = `
+    <div class="save-card green">
+      <div class="save-label">Monthly Reduction</div>
+      <div class="save-value">${fmt(Math.abs(savPerMo))}/mo</div>
+      <div class="save-sub">${fmt(avg25)} avg → ${fmt(kpis.avg26)} avg per month</div>
+    </div>
+    <div class="save-card amber">
+      <div class="save-label">App Portfolio</div>
+      <div class="save-value">${appWas} → ${appNow}</div>
+      <div class="save-sub">${Math.round((1-appNow/appWas)*100)}% fewer active apps</div>
+    </div>
+    <div class="save-card blue">
+      <div class="save-label">Projected Annual Spend</div>
+      <div class="save-value">${fmt(kpis.proj26)}</div>
+      <div class="save-sub">vs. ${fmt(kpis.total25)} in 2025</div>
+    </div>
+    <div class="save-card purple">
+      <div class="save-label">Projected Annual Saving</div>
+      <div class="save-value">${fmt(Math.abs(kpis.savedVs25))}</div>
+      <div class="save-sub">vs. full-year 2025 baseline</div>
+    </div>
+  `;
+
+  // ── Dept Pie subtitle
+  document.getElementById('deptPieSub').textContent =
+    mthLabels.join('–') + ' 2026 · ' + fmt(kpis.ytd26) + ' total';
+
+  // ── Projection subtitle
+  document.getElementById('projSubtitle').textContent =
+    `Based on ${fmt(kpis.avg26)}/month average (${mthLabels.join('–')} 2026 actuals)`;
+
+  // ── Projection bars
+  const maxV = kpis.total25;
+  const deptKeys = ['Operations','AMF','Finance','AMZ Sales','HR','Design'];
+  const deptBars = deptKeys.map(dk => {
+    const v25 = dept25[dk] || 0;
+    const v26ann = (dept26[dk] || 0) * (12/mthsActive);
+    return `<div class="proj-row">
+      <div class="proj-meta"><span class="proj-name">${dk} Dept — 2026 Annualized</span><span class="proj-amt">${fmt(v26ann)}</span></div>
+      <div class="proj-track"><div class="proj-fill" style="width:${Math.min(v26ann/maxV*100,100).toFixed(1)}%;background:${DEPT_COLORS[dk]||'#64748b'};"></div></div>
+      <div class="proj-sub">${fmt(v26ann)} projected vs. ${fmt(v25)} in 2025${v25>0?' (saves '+fmt(v25-v26ann)+')':''}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('projBars').innerHTML = `
+    <div class="proj-row">
+      <div class="proj-meta"><span class="proj-name">2025 Actual Total</span><span class="proj-amt">${fmt(kpis.total25)}</span></div>
+      <div class="proj-track"><div class="proj-fill" style="width:100%;background:#3b82f6;"></div></div>
+      <div class="proj-sub">Baseline — full year 2025</div>
+    </div>
+    <div class="proj-row">
+      <div class="proj-meta"><span class="proj-name">2026 YTD Actual (${mthLabels.join('–')})</span><span class="proj-amt">${fmt(kpis.ytd26)}</span></div>
+      <div class="proj-track"><div class="proj-fill" style="width:${(kpis.ytd26/maxV*100).toFixed(1)}%;background:#22c55e;"></div></div>
+      <div class="proj-sub">${pct(kpis.ytd26,kpis.total25)} of 2025 baseline · ${mthsActive} of 12 months completed</div>
+    </div>
+    <div class="proj-row">
+      <div class="proj-meta"><span class="proj-name">2026 Projected Full Year</span><span class="proj-amt">${fmt(kpis.proj26)}</span></div>
+      <div class="proj-track"><div class="proj-fill" style="width:${Math.min(kpis.proj26/maxV*100,100).toFixed(1)}%;background:#f59e0b;"></div></div>
+      <div class="proj-sub">${pct(kpis.proj26,kpis.total25)} of 2025 — projected to save ${fmt(Math.abs(kpis.savedVs25))}</div>
+    </div>
+    ${deptBars}
+  `;
+
+  // ── Populate dept filter
+  const depts = [...new Set(apps.map(a=>a.dept).filter(Boolean))].sort();
+  const df = document.getElementById('deptFilter');
+  df.innerHTML = '<option value="">All Departments</option>' +
+    depts.map(d=>`<option>${d}</option>`).join('');
+
+  // ── Render table
+  filterTable();
+
+  // ── Charts
+  buildCharts({ kpis, monthly26, monthly25, dept25, dept26, top10_25, top5_26, mthsActive });
+}
+
+// ── Build all Chart.js charts ─────────────────────────────────────────────
+function buildCharts({ kpis, monthly26, monthly25, dept25, dept26, top10_25, top5_26, mthsActive }) {
+
+  // Trend chart
+  const data26Act  = MONTHS_SHORT.map((_,i) => i < mthsActive ? monthly26[i] : null);
+  const data26Proj = MONTHS_SHORT.map((_,i) => {
+    if (i < mthsActive - 1) return null;
+    return kpis.avg26;
+  });
+
+  CHARTS.trend = new Chart(document.getElementById('trendChart'), {
     data: {
-      labels,
+      labels: MONTHS_SHORT,
       datasets: [
-        {
-          type:'bar', label:'2025 Actual', data:data25,
-          backgroundColor: 'rgba(59,130,246,0.25)',
-          borderColor: 'rgba(59,130,246,0.7)',
-          borderWidth: 1, borderRadius: 4, yAxisID:'y'
-        },
-        {
-          type:'line', label:'2026 Actual', data:data26Act,
-          borderColor:'#22c55e', backgroundColor:'rgba(34,197,94,0.1)',
-          borderWidth:3, pointRadius:5, pointBackgroundColor:'#22c55e',
-          fill:false, tension:0.3, spanGaps:false, yAxisID:'y'
-        },
-        {
-          type:'line', label:'2026 Projected', data:proj26,
+        { type:'bar', label:'2025 Actual', data:monthly25,
+          backgroundColor:'rgba(59,130,246,0.25)', borderColor:'rgba(59,130,246,0.6)',
+          borderWidth:1, borderRadius:3, yAxisID:'y' },
+        { type:'line', label:'2026 Actual', data:data26Act,
+          borderColor:'#22c55e', backgroundColor:'rgba(34,197,94,0.08)',
+          borderWidth:2.5, pointRadius:4, fill:false, tension:0.3, spanGaps:false, yAxisID:'y' },
+        { type:'line', label:'2026 Projected', data:data26Proj,
           borderColor:'#f59e0b', backgroundColor:'transparent',
-          borderWidth:2, borderDash:[6,4], pointRadius:3,
-          fill:false, tension:0.3, spanGaps:false, yAxisID:'y'
-        }
+          borderWidth:2, borderDash:[5,4], pointRadius:3, fill:false, tension:0, spanGaps:false, yAxisID:'y' }
       ]
     },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
-        tooltip:{ callbacks:{ label: ctx => ` $${ctx.raw?.toLocaleString('en-US',{maximumFractionDigits:0})}` } }
-      },
-      scales:{
-        y:{ ticks:{ callback: v => '$'+v.toLocaleString('en-US',{notation:'compact'}), font:{size:10} },
-            grid:{ color:'rgba(0,0,0,.05)' } },
-        x:{ grid:{ display:false }, ticks:{ font:{size:11} } }
-      }
-    }
+    options: chartOpts({ legendPos:'bottom', yFmt:v=>'$'+v.toLocaleString('en-US',{notation:'compact'}), tipFmt:ctx=>` $${(ctx.raw||0).toLocaleString('en-US',{maximumFractionDigits:0})}` })
   });
-})();
 
-// ═══════════════════════════════════════════════════ CHART 2: Dept Pie
-(function() {
-  const depts = ['Operations','AMF','Finance','AMZ Sales','HR','Design','IT','Data Team'];
-  const vals26 = [70862,37370,30000,18303,3409,3207,26,109];
-  new Chart(document.getElementById('deptPieChart'),{
+  // Dept Pie
+  const deptKeys = Object.keys(dept26).filter(k=>dept26[k]>0).sort((a,b)=>dept26[b]-dept26[a]);
+  CHARTS.deptPie = new Chart(document.getElementById('deptPieChart'), {
     type:'doughnut',
-    data:{
-      labels: depts,
-      datasets:[{
-        data: vals26,
-        backgroundColor: depts.map(d=>deptColors[d]||'#94a3b8'),
-        borderWidth:2, borderColor:'#fff', hoverOffset:6
-      }]
+    data: {
+      labels: deptKeys,
+      datasets: [{ data: deptKeys.map(k=>dept26[k]),
+        backgroundColor: deptKeys.map(k=>DEPT_COLORS[k]||'#94a3b8'),
+        borderWidth:2, borderColor:'#fff', hoverOffset:5 }]
     },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{ position:'right', labels:{ boxWidth:12, font:{size:10}, padding:8 } },
-        tooltip:{ callbacks:{ label: ctx => ` ${ctx.label}: $${ctx.raw.toLocaleString()} (${(ctx.raw/163284*100).toFixed(1)}%)` } }
-      }
-    }
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins: { legend:{ position:'right', labels:{boxWidth:11,font:{size:9},padding:6} },
+        tooltip:{ callbacks:{ label:ctx=>` ${ctx.label}: ${fmt(ctx.raw)} (${pct(ctx.raw,kpis.ytd26)})` } } } }
   });
-})();
 
-// ═══════════════════════════════════════════════════ CHART 3: Top 10
-(function() {
-  const names = ['Surpass Solutions','Stedi','Intuit Quickbooks','Shipstation',
-                 'Luminous Soft.','Google Workspace','Airtable','BambooHR',
-                 'Acenda','LinkedIn'];
-  const vals  = [57790,55050,35801,35492,40334,22777,15618,15361,14274,13327];
-  new Chart(document.getElementById('top10Chart'),{
+  // Top 10 2025
+  const t10names = top10_25.map(a=>a.name.length>20?a.name.slice(0,19)+'…':a.name);
+  CHARTS.top10 = new Chart(document.getElementById('top10Chart'), {
     type:'bar',
-    data:{
-      labels: names,
-      datasets:[{ label:'2025 Spend', data:vals,
-        backgroundColor: names.map((_,i)=>`hsla(${200+i*12},80%,55%,0.8)`),
-        borderRadius:4 }]
-    },
-    options:{
-      indexAxis:'y', responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{ callbacks:{ label: ctx => ` $${ctx.raw.toLocaleString()}` } }
-      },
-      scales:{
-        x:{ ticks:{ callback: v=>'$'+v.toLocaleString('en-US',{notation:'compact'}), font:{size:10} },
-            grid:{color:'rgba(0,0,0,.05)'} },
-        y:{ ticks:{ font:{size:10} }, grid:{display:false} }
-      }
-    }
+    data: { labels:t10names,
+      datasets:[{ label:'2025 Spend', data:top10_25.map(a=>a.value),
+        backgroundColor:top10_25.map((_,i)=>`hsla(${200+i*12},75%,55%,0.85)`), borderRadius:3 }] },
+    options: { indexAxis:'y', ...chartOpts({ yFmt:false, legendPos:false, tipFmt:ctx=>` ${fmt(ctx.raw)}` }) }
   });
-})();
 
-// ═══════════════════════════════════════════════════ CHART 4: Dept Bar
-(function() {
-  const depts = ['Operations','AMF','Finance','AMZ Sales','HR','Design'];
-  const v25   = [222854,115367,67483,25655,38804,23386];
-  const v26ann = [70862*3, 37370*3, 30000*3, 18303*3, 3409*3, 3207*3];
-  new Chart(document.getElementById('deptBarChart'),{
+  // Dept Bar
+  const dKeys = ['Operations','AMF','Finance','AMZ Sales','HR','Design'];
+  CHARTS.deptBar = new Chart(document.getElementById('deptBarChart'), {
     type:'bar',
-    data:{
-      labels:depts,
+    data: { labels:dKeys,
       datasets:[
-        { label:'2025 Actual', data:v25,  backgroundColor:'rgba(59,130,246,0.7)', borderRadius:4 },
-        { label:'2026 Annualized', data:v26ann, backgroundColor:'rgba(34,197,94,0.7)', borderRadius:4 }
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
-        tooltip:{ callbacks:{ label: ctx => ` $${ctx.raw.toLocaleString()}` } }
-      },
-      scales:{
-        y:{ ticks:{ callback:v=>'$'+v.toLocaleString('en-US',{notation:'compact'}), font:{size:10} },
-            grid:{color:'rgba(0,0,0,.05)'} },
-        x:{ grid:{display:false}, ticks:{font:{size:10}} }
-      }
-    }
+        { label:'2025 Actual', data:dKeys.map(k=>dept25[k]||0), backgroundColor:'rgba(59,130,246,0.75)', borderRadius:3 },
+        { label:'2026 Annualized', data:dKeys.map(k=>((dept26[k]||0)/mthsActive*12)), backgroundColor:'rgba(34,197,94,0.75)', borderRadius:3 }
+      ] },
+    options: chartOpts({ legendPos:'bottom', yFmt:v=>'$'+v.toLocaleString('en-US',{notation:'compact'}), tipFmt:ctx=>` ${fmt(ctx.raw)}` })
   });
-})();
 
-// ═══════════════════════════════════════════════════ CHART 5: Status Donut
-(function() {
-  const active = apps.filter(a=>a.status==='Active').length;
-  const reduced = apps.filter(a=>a.status==='Reduced').length;
-  const cancelled = apps.filter(a=>a.status==='Cancelled').length;
-  new Chart(document.getElementById('statusChart'),{
+  // Status donut
+  const ac=ALL_APPS.filter(a=>a.status==='Active').length,
+        rd=ALL_APPS.filter(a=>a.status==='Reduced').length,
+        cn=ALL_APPS.filter(a=>a.status==='Cancelled').length;
+  CHARTS.status = new Chart(document.getElementById('statusChart'), {
     type:'doughnut',
-    data:{
-      labels:['Active','Reduced','Cancelled'],
-      datasets:[{ data:[active,reduced,cancelled],
-        backgroundColor:['#22c55e','#f59e0b','#ef4444'],
-        borderWidth:2, borderColor:'#fff', hoverOffset:6
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{ position:'bottom', labels:{boxWidth:12,font:{size:11}} },
-        tooltip:{ callbacks:{ label: ctx => ` ${ctx.label}: ${ctx.raw} apps` } }
-      }
-    }
+    data: { labels:[`Active (${ac})`,`Reduced (${rd})`,`Cancelled (${cn})`],
+      datasets:[{ data:[ac,rd,cn], backgroundColor:['#22c55e','#f59e0b','#ef4444'],
+        borderWidth:2, borderColor:'#fff', hoverOffset:5 }] },
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:'bottom',labels:{boxWidth:11,font:{size:10}}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.raw} apps`}} } }
   });
-})();
 
-// ═══════════════════════════════════════════════════ CHART 6: 2026 Monthly Bar
-(function() {
-  new Chart(document.getElementById('monthly2026Chart'),{
+  // Monthly 2026 bar
+  const mthColors = monthly26.map((_,i)=>i===monthly26.length-1?'rgba(245,158,11,0.85)':'rgba(59,130,246,0.8)');
+  CHARTS.monthly26 = new Chart(document.getElementById('monthly2026Chart'), {
     type:'bar',
-    data:{
-      labels:['January','February','March','April'],
-      datasets:[{ label:'Actual Spend',
-        data:[45337,33404,33066,56964],
-        backgroundColor:['rgba(59,130,246,0.8)','rgba(34,197,94,0.8)',
-                         'rgba(34,197,94,0.8)','rgba(245,158,11,0.8)'],
-        borderRadius:6
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{ callbacks:{ label: ctx => ` $${ctx.raw.toLocaleString()}` } }
-      },
-      scales:{
-        y:{ ticks:{ callback:v=>'$'+v.toLocaleString('en-US',{notation:'compact'}), font:{size:10} },
-            grid:{color:'rgba(0,0,0,.05)'} },
-        x:{ grid:{display:false}, ticks:{font:{size:11}} }
-      }
-    }
+    data: { labels:MONTHS_LONG.slice(0,mthsActive),
+      datasets:[{ label:'Actual Spend', data:monthly26.slice(0,mthsActive),
+        backgroundColor:mthColors, borderRadius:5 }] },
+    options: chartOpts({ legendPos:false, yFmt:v=>'$'+v.toLocaleString('en-US',{notation:'compact'}), tipFmt:ctx=>` ${fmt(ctx.raw)}` })
   });
-})();
 
-// ═══════════════════════════════════════════════════ CHART 7: Top 5 2026
-(function() {
-  const sorted = [...apps].filter(a=>a.s26>0).sort((a,b)=>b.s26-a.s26).slice(0,5);
-  new Chart(document.getElementById('top5_2026Chart'),{
+  // Top 5 2026
+  CHARTS.top5 = new Chart(document.getElementById('top5Chart'), {
     type:'bar',
-    data:{
-      labels: sorted.map(a=>a.name.length>18?a.name.slice(0,17)+'…':a.name),
-      datasets:[{ label:'2026 YTD', data: sorted.map(a=>a.s26),
-        backgroundColor:sorted.map((_,i)=>`hsla(${150+i*25},70%,50%,0.8)`),
-        borderRadius:6
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{ callbacks:{ label: ctx => ` $${ctx.raw.toLocaleString()}` } }
-      },
-      scales:{
-        y:{ ticks:{ callback:v=>'$'+v.toLocaleString('en-US',{notation:'compact'}), font:{size:10} },
-            grid:{color:'rgba(0,0,0,.05)'} },
-        x:{ grid:{display:false}, ticks:{font:{size:10}} }
-      }
-    }
+    data: { labels:top5_26.map(a=>a.name.length>15?a.name.slice(0,14)+'…':a.name),
+      datasets:[{ label:'2026 YTD', data:top5_26.map(a=>a.value),
+        backgroundColor:['rgba(34,197,94,0.85)','rgba(59,130,246,0.85)','rgba(245,158,11,0.85)',
+                         'rgba(167,139,250,0.85)','rgba(20,184,166,0.85)'], borderRadius:5 }] },
+    options: chartOpts({ legendPos:false, yFmt:v=>'$'+v.toLocaleString('en-US',{notation:'compact'}), tipFmt:ctx=>` ${fmt(ctx.raw)}` })
   });
-})();
+}
 
-// ═══════════════════════════════════════════════════ TABLE
-let currentSort = 'spend2025';
-let sortDir = -1;
+function chartOpts({ legendPos, yFmt, tipFmt }) {
+  return {
+    responsive:true, maintainAspectRatio:false,
+    plugins: {
+      legend: legendPos ? { position:legendPos, labels:{boxWidth:11,font:{size:10}} } : {display:false},
+      tooltip: tipFmt ? { callbacks:{ label:tipFmt } } : {}
+    },
+    scales: {
+      y: yFmt ? { ticks:{callback:yFmt,font:{size:9}}, grid:{color:'rgba(0,0,0,.04)'} } : undefined,
+      x: { grid:{display:false}, ticks:{font:{size:9}} }
+    }
+  };
+}
 
+// ── Table ─────────────────────────────────────────────────────────────────
 function setSortField(f) {
-  if (currentSort === f) { sortDir *= -1; } else { currentSort = f; sortDir = -1; }
-  document.getElementById('sortField').value = f;
+  if (currentSort===f) sortDir*=-1; else { currentSort=f; sortDir=-1; }
+  document.getElementById('sortSel').value=f;
   filterTable();
 }
-
-function fmt(v) {
-  if (!v || v === 0) return '$—';
-  return '$' + v.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
-}
-
 function filterTable() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const dept = document.getElementById('deptFilter').value;
   const status = document.getElementById('statusFilter').value;
-  currentSort = document.getElementById('sortField').value;
+  currentSort = document.getElementById('sortSel').value;
 
-  let filtered = apps.filter(a => {
+  let filtered = ALL_APPS.filter(a => {
     if (q && !a.name.toLowerCase().includes(q)) return false;
     if (dept && a.dept !== dept) return false;
     if (status && a.status !== status) return false;
     return true;
   });
-
   filtered.sort((a,b) => {
-    let va, vb;
-    switch(currentSort) {
-      case 'spend2025': va=a.s25; vb=b.s25; break;
-      case 'spend2026': va=a.s26; vb=b.s26; break;
-      case 'savings':   va=a.mthSavings*12; vb=b.mthSavings*12; break;
-      case 'name':      return a.name.localeCompare(b.name) * (sortDir>0?1:-1);
-      default:          va=a.s25; vb=b.s25;
-    }
+    if (currentSort==='name') return a.name.localeCompare(b.name)*(sortDir>0?1:-1);
+    const va = currentSort==='spend2025'?a.s25 : currentSort==='spend2026'?a.s26 : ((a.s25/12)-(a.s26/4))*12;
+    const vb = currentSort==='spend2025'?b.s25 : currentSort==='spend2026'?b.s26 : ((b.s25/12)-(b.s26/4))*12;
     return (va-vb)*sortDir;
   });
 
   const tbody = document.getElementById('tableBody');
   const noRes = document.getElementById('noResults');
-
-  if (filtered.length === 0) {
-    tbody.innerHTML = '';
-    noRes.style.display = 'block';
-    document.getElementById('tableCount').textContent = '0 applications';
+  if (!filtered.length) {
+    tbody.innerHTML=''; noRes.style.display='block';
+    document.getElementById('tableCount').textContent='0 results';
     return;
   }
-  noRes.style.display = 'none';
-
+  noRes.style.display='none';
   tbody.innerHTML = filtered.map(a => {
-    const annSavings = a.mthSavings * 12;
-    const savClass = annSavings >= 0 ? 'savings-pos' : 'savings-neg';
-    const savLabel = annSavings >= 0
-      ? `+${fmt(annSavings)}`
-      : `-$${Math.abs(annSavings).toLocaleString('en-US',{maximumFractionDigits:0})}`;
+    const ann = ((a.s25/12)-(a.s26/4))*12;
+    const sc  = ann>=0?'spos':'sneg';
+    const sl  = (ann>=0?'+':'-')+'$'+Math.abs(ann).toLocaleString('en-US',{maximumFractionDigits:0});
     return `<tr>
       <td><strong>${a.name}</strong></td>
-      <td><span class="dept-chip">${a.dept}</span></td>
-      <td>${a.billing}</td>
-      <td><span class="status-badge status-${a.status}">${a.status}</span></td>
+      <td><span class="dept-chip">${a.dept||'—'}</span></td>
+      <td>${a.renewal||'—'}</td>
+      <td><span class="status-badge s-${a.status}">${a.status}</span></td>
       <td class="num">${fmt(a.s25)}</td>
       <td class="num">${fmt(a.s26)}</td>
-      <td class="${savClass}">${savLabel}<span style="font-size:.65rem;color:#94a3b8;font-weight:400"> /yr</span></td>
+      <td class="${sc}">${sl}<span style="font-size:.6rem;color:#94a3b8;font-weight:400"> /yr</span></td>
     </tr>`;
   }).join('');
-
   document.getElementById('tableCount').textContent =
-    `Showing ${filtered.length} of ${apps.length} applications`;
+    `Showing ${filtered.length} of ${ALL_APPS.length} applications`;
 }
 
-// Init table
-filterTable();
+// ── Static fallback data (used until Apps Script is configured) ───────────
+function getStaticData() {
+  const apps = [
+    {name:"Stedi",dept:"Operations",renewal:"Monthly",status:"Active",s25:55050.28,s26:37331.62},
+    {name:"Surpass Solutions",dept:"Operations",renewal:"Monthly",status:"Reduced",s25:57790,s26:5963.12},
+    {name:"Intuit Quickbooks",dept:"Finance",renewal:"Monthly",status:"Active",s25:35801.42,s26:21537.85},
+    {name:"Shipstation",dept:"Operations",renewal:"Monthly",status:"Reduced",s25:35491.96,s26:1997.32},
+    {name:"Luminous Software Solutions",dept:"Operations",renewal:"Monthly",status:"Active",s25:40333.82,s26:18200},
+    {name:"Google Workspace",dept:"AMF",renewal:"Monthly",status:"Active",s25:22776.65,s26:8188.54},
+    {name:"Microsoft 365",dept:"AMF",renewal:"Monthly",status:"Active",s25:17693.73,s26:6279.43},
+    {name:"Airtable",dept:"AMF",renewal:"Monthly",status:"Reduced",s25:15617.82,s26:3916.29},
+    {name:"BambooHR",dept:"HR",renewal:"Monthly",status:"Reduced",s25:15360.87,s26:3231.11},
+    {name:"LinkedIn",dept:"HR",renewal:"Monthly",status:"Reduced",s25:13327.38,s26:76.20},
+    {name:"Notion Labs",dept:"AMF",renewal:"Monthly",status:"Reduced",s25:12004.11,s26:2959.42},
+    {name:"ClickUp",dept:"AMF",renewal:"Monthly",status:"Cancelled",s25:11897.66,s26:2004.50},
+    {name:"Slack",dept:"AMF",renewal:"Monthly",status:"Reduced",s25:9763.41,s26:1850.83},
+    {name:"Upwork",dept:"HR",renewal:"Monthly",status:"Reduced",s25:9270.52,s26:101.38},
+    {name:"Surpass EDI",dept:"Operations",renewal:"Monthly",status:"Cancelled",s25:8000,s26:0},
+    {name:"PierPass LLC",dept:"Design",renewal:"Monthly",status:"Active",s25:7758.92,s26:1077.28},
+    {name:"Adobe Creative",dept:"Design",renewal:"Monthly",status:"Reduced",s25:7758.35,s26:1754.74},
+    {name:"ACE Cloud Hosting",dept:"Finance",renewal:"Monthly",status:"Reduced",s25:7421.53,s26:3088.26},
+    {name:"Taxjar",dept:"Finance",renewal:"Monthly",status:"Active",s25:7224.92,s26:2516.64},
+    {name:"Ezcom / Lingo",dept:"Finance",renewal:"Monthly",status:"Cancelled",s25:6847.67,s26:0},
+    {name:"Siliconwhiz (Syncario)",dept:"Finance",renewal:"Monthly",status:"Cancelled",s25:6820,s26:0},
+    {name:"Ad Badger",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:6515.33,s26:4290},
+    {name:"1Password",dept:"AMF",renewal:"Annual",status:"Active",s25:7366.93,s26:2418.84},
+    {name:"Acenda",dept:"Operations",renewal:"Monthly",status:"Active",s25:14274.13,s26:5996},
+    {name:"Commercehub",dept:"Operations",renewal:"Monthly",status:"Active",s25:5215.50,s26:0},
+    {name:"ChatGPT",dept:"AMF",renewal:"Monthly",status:"Active",s25:5879.84,s26:1197.89},
+    {name:"Dropbox",dept:"AMF",renewal:"Monthly",status:"Reduced",s25:3960,s26:1080},
+    {name:"Zendesk",dept:"Operations",renewal:"Monthly",status:"Reduced",s25:3974.35,s26:817.01},
+    {name:"Cleverbridge (Keyshot)",dept:"Design",renewal:"Annual",status:"Cancelled",s25:3070.28,s26:0},
+    {name:"Google Cloud",dept:"AMF",renewal:"Monthly",status:"Active",s25:2308.17,s26:1690.48},
+    {name:"Shopify",dept:"AMF",renewal:"Monthly",status:"Active",s25:2516.35,s26:2107.56},
+    {name:"Autodesk",dept:"Design",renewal:"Annual",status:"Cancelled",s25:2721.88,s26:0},
+    {name:"OpenPhone",dept:"AMF",renewal:"Monthly",status:"Reduced",s25:2225.98,s26:1442.12},
+    {name:"Amazon Web Services",dept:"Operations",renewal:"Monthly",status:"Active",s25:1865.32,s26:411.38},
+    {name:"Scraper API",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:1843,s26:1196},
+    {name:"Loom",dept:"AMF",renewal:"Monthly",status:"Reduced",s25:1540.29,s26:495},
+    {name:"DataDive",dept:"AMZ Sales",renewal:"Monthly",status:"Cancelled",s25:1413,s26:0},
+    {name:"Right Networks",dept:"Finance",renewal:"Monthly",status:"Reduced",s25:1417.58,s26:0},
+    {name:"Traveling Mailbox",dept:"Finance",renewal:"Monthly",status:"Active",s25:1009.36,s26:141.40},
+    {name:"Google Workspace (Nova Eats)",dept:"AMF",renewal:"Monthly",status:"Active",s25:248.55,s26:135.19},
+    {name:"Google Fi",dept:"AMF",renewal:"Monthly",status:"Reduced",s25:955.29,s26:294.16},
+    {name:"Zapier",dept:"AMZ Sales",renewal:"Monthly",status:"Reduced",s25:931.50,s26:340.49},
+    {name:"Keepa",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:2746.14,s26:1894.95},
+    {name:"Helium 10",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:2748,s26:916},
+    {name:"Klaviyo",dept:"AMZ Sales",renewal:"Monthly",status:"Reduced",s25:402.85,s26:925.46},
+    {name:"Anthropic (Claude Team)",dept:"AMF",renewal:"Monthly",status:"Active",s25:664.17,s26:2387.84},
+    {name:"NordVPN",dept:"AMF",renewal:"Annual",status:"Active",s25:162.72,s26:463.60},
+    {name:"Getida",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:210.13,s26:721.14},
+    {name:"180 Marketing",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:0,s26:5075},
+    {name:"Corporate Filings LLC",dept:"Finance",renewal:"Monthly",status:"Active",s25:0,s26:1869},
+    {name:"Hostwinds (Subscription)",dept:"IT",renewal:"Monthly",status:"Active",s25:371.88,s26:131.62},
+    {name:"PortCheck LLC",dept:"Design",renewal:"Monthly",status:"Active",s25:2030,s26:270},
+    {name:"SimplyVAT.com",dept:"Finance",renewal:"Monthly",status:"Active",s25:0,s26:531.49},
+    {name:"Eversign",dept:"AMF",renewal:"Monthly",status:"Reduced",s25:275.76,s26:101.93},
+    {name:"Endicia",dept:"Operations",renewal:"Monthly",status:"Active",s25:267.78,s26:133.89},
+    {name:"Later",dept:"AMZ Sales",renewal:"Monthly",status:"Reduced",s25:408.27,s26:54.44},
+    {name:"Feedback Five",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:828,s26:276},
+    {name:"Github",dept:"Data Team",renewal:"Monthly",status:"Active",s25:172.62,s26:109.05},
+    {name:"GoDaddy",dept:"IT",renewal:"Monthly",status:"Active",s25:179.56,s26:26},
+    {name:"Figma",dept:"AMZ Sales",renewal:"Annual",status:"Reduced",s25:195.98,s26:27.23},
+    {name:"Flickr",dept:"Design",renewal:"Annual",status:"Active",s25:79.46,s26:29.76},
+    {name:"Tally.so",dept:"Finance",renewal:"Monthly",status:"Active",s25:348,s26:58},
+    {name:"Canva",dept:"Design",renewal:"Monthly",status:"Active",s25:101.88,s26:16.98},
+    {name:"Supabase",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:25,s26:75},
+    {name:"Vercel",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:0,s26:87.12},
+    {name:"Hubspot",dept:"AMZ Sales",renewal:"Monthly",status:"Active",s25:0,s26:16.33},
+    {name:"Avalara",dept:"Finance",renewal:"Monthly",status:"Active",s25:0,s26:74.10},
+    {name:"Higgsfield",dept:"Design",renewal:"Monthly",status:"Active",s25:0,s26:58},
+    {name:"Jotform",dept:"HR",renewal:"Monthly",status:"Cancelled",s25:640.18,s26:0},
+  ];
+
+  const monthly26 = [45337, 33404, 33066, 56964];
+  const monthly25 = [32329,54524,45934,53522,36100,28222,56703,61382,46716,47197,47986,32079];
+  const total25   = apps.reduce((s,a)=>s+a.s25,0);
+  const ytd26     = monthly26.reduce((s,v)=>s+v,0);
+  const avg26     = ytd26/4;
+  const proj26    = avg26*12;
+
+  const dept25={},dept26={};
+  apps.forEach(a=>{
+    dept25[a.dept]=(dept25[a.dept]||0)+a.s25;
+    dept26[a.dept]=(dept26[a.dept]||0)+a.s26;
+  });
+
+  const top10_25=[...apps].sort((a,b)=>b.s25-a.s25).slice(0,10).map(a=>({name:a.name,value:a.s25}));
+  const top5_26=[...apps].filter(a=>a.s26>0).sort((a,b)=>b.s26-a.s26).slice(0,5).map(a=>({name:a.name,value:a.s26}));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    kpis: {
+      total25: Math.round(total25), ytd26: Math.round(ytd26),
+      proj26: Math.round(proj26), avg26: Math.round(avg26),
+      savedVs25: Math.round(total25-proj26),
+      activeCount: apps.filter(a=>a.status==='Active').length,
+      reducedCount: apps.filter(a=>a.status==='Reduced').length,
+      cancelledCount: apps.filter(a=>a.status==='Cancelled').length
+    },
+    monthly26, monthly25, dept25, dept26, top10_25, top5_26, apps
+  };
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+loadDashboard();
 </script>
 </body>
 </html>
