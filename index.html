@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>American Flat â IT SaaS Dashboard 2026</title>
+  <title>American Flat — IT SaaS Dashboard 2026</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
   <style>
@@ -43,7 +43,7 @@
       min-height: 100vh;
     }
 
-    /* ââ HEADER âââââââââââââââââââââââââââââââââââââââââââââââ */
+    /* ── HEADER ─────────────────────────────────────────────── */
     header {
       background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%);
       padding: 32px 40px 28px;
@@ -73,7 +73,7 @@
       color: rgba(255,255,255,.85);
     }
 
-    /* ââ LOADING BANNER ââââââââââââââââââââââââââââââââââââââââ */
+    /* ── LOADING BANNER ──────────────────────────────────────── */
     .loading-banner {
       display: flex;
       align-items: center;
@@ -102,7 +102,7 @@
       color: var(--red);
     }
 
-    /* ââ LAYOUT ââââââââââââââââââââââââââââââââââââââââââââââââ */
+    /* ── LAYOUT ──────────────────────────────────────────────── */
     main { padding: 32px 40px; max-width: 1600px; margin: 0 auto; }
     .section-title {
       font-size: .7rem;
@@ -115,7 +115,7 @@
       border-bottom: 1px solid var(--slate-300);
     }
 
-    /* ââ KPI CARDS âââââââââââââââââââââââââââââââââââââââââââââ */
+    /* ── KPI CARDS ───────────────────────────────────────────── */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -158,7 +158,7 @@
     .kpi-delta.up    { background: var(--red-bg);   color: var(--red); }
     .kpi-delta.save  { background: var(--green-bg); color: var(--green); }
 
-    /* ââ CHARTS GRID âââââââââââââââââââââââââââââââââââââââââââ */
+    /* ── CHARTS GRID ─────────────────────────────────────────── */
     .charts-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -194,7 +194,7 @@
     }
     .chart-wrap { position: relative; }
 
-    /* ââ SAVINGS HIGHLIGHT âââââââââââââââââââââââââââââââââââââ */
+    /* ── SAVINGS HIGHLIGHT ───────────────────────────────────── */
     .savings-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -229,7 +229,7 @@
     .save-value { font-size: 1.5rem; font-weight: 800; color: var(--slate-900); }
     .save-sub   { font-size: .72rem; color: var(--slate-500); margin-top: 4px; }
 
-    /* ââ PROJECTION BAR ââââââââââââââââââââââââââââââââââââââââ */
+    /* ── PROJECTION BAR ──────────────────────────────────────── */
     .proj-card {
       background: var(--white);
       border-radius: var(--radius);
@@ -258,7 +258,7 @@
     }
     .proj-sub { font-size: .7rem; color: var(--slate-500); }
 
-    /* ââ APP TABLE âââââââââââââââââââââââââââââââââââââââââââââ */
+    /* ── APP TABLE ───────────────────────────────────────────── */
     .table-card {
       background: var(--white);
       border-radius: var(--radius);
@@ -351,7 +351,7 @@
       margin-top: 12px; font-size: .78rem; color: var(--slate-500);
     }
 
-    /* ââ FOOTER ââââââââââââââââââââââââââââââââââââââââââââââââ */
+    /* ── FOOTER ──────────────────────────────────────────────── */
     footer {
       text-align: center;
       padding: 20px;
@@ -363,16 +363,16 @@
 </head>
 <body>
 
-<!-- âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ HEADER -->
+<!-- ═══════════════════════════════════════════════════════════ HEADER -->
 <header>
   <div class="brand">
-    <div class="logo-box">ð</div>
+    <div class="logo-box">📊</div>
     <div>
       <h1>IT SaaS &amp; Software Dashboard</h1>
-      <div class="sub">American Flat Â· 2025 Full Year vs. 2026 Year-to-Date</div>
+      <div class="sub">American Flat · 2025 Full Year vs. 2026 Year-to-Date</div>
     </div>
   </div>
-  <div class="badge" id="header-badge">Loading dataâ¦</div>
+  <div class="badge" id="header-badge">Loading data…</div>
 </header>
 
 <main>
@@ -380,85 +380,85 @@
   <!-- Loading banner -->
   <div class="loading-banner" id="loading-banner">
     <div class="spinner"></div>
-    <span>Loading live data from Google Sheetsâ¦</span>
+    <span>Loading live data from Google Sheets…</span>
   </div>
 
-  <!-- âââââââââââââââââââââââââââââââââââââââââââââââââââââââ KPI CARDS -->
+  <!-- ═══════════════════════════════════════════════════════ KPI CARDS -->
   <div class="section-title">Key Performance Indicators</div>
   <div class="kpi-grid">
 
-    <div class="kpi blue" data-icon="ð°">
+    <div class="kpi blue" data-icon="💰">
       <div class="kpi-label">2025 Total Spend</div>
-      <div class="kpi-value" id="kpi-total25">â</div>
+      <div class="kpi-value" id="kpi-total25">—</div>
       <div class="kpi-sub" id="kpi-total25-sub">full year actual</div>
     </div>
 
-    <div class="kpi green" data-icon="ð">
+    <div class="kpi green" data-icon="📅">
       <div class="kpi-label">2026 YTD Spend</div>
-      <div class="kpi-value" id="kpi-ytd26">â</div>
+      <div class="kpi-value" id="kpi-ytd26">—</div>
       <div class="kpi-sub" id="kpi-ytd26-sub">actual spend</div>
-      <div class="kpi-delta down" id="kpi-ytd26-delta">â</div>
+      <div class="kpi-delta down" id="kpi-ytd26-delta">—</div>
     </div>
 
-    <div class="kpi green" data-icon="ð">
+    <div class="kpi green" data-icon="🏆">
       <div class="kpi-label">Annual Savings YTD</div>
-      <div class="kpi-value" id="kpi-annualsavings">â</div>
+      <div class="kpi-value" id="kpi-annualsavings">—</div>
       <div class="kpi-sub">Reduction in contracted annual spend</div>
     </div>
 
-    <div class="kpi amber" data-icon="ð">
+    <div class="kpi amber" data-icon="📈">
       <div class="kpi-label">2026 Full-Year Projection</div>
-      <div class="kpi-value" id="kpi-proj26">â</div>
+      <div class="kpi-value" id="kpi-proj26">—</div>
       <div class="kpi-sub" id="kpi-proj26-sub">based on monthly average</div>
-      <div class="kpi-delta save" id="kpi-proj26-delta">â</div>
+      <div class="kpi-delta save" id="kpi-proj26-delta">—</div>
     </div>
 
-    <div class="kpi red" data-icon="ð«">
+    <div class="kpi red" data-icon="🚫">
       <div class="kpi-label">Apps Cancelled</div>
-      <div class="kpi-value" id="kpi-cancelled">â</div>
+      <div class="kpi-value" id="kpi-cancelled">—</div>
       <div class="kpi-sub" id="kpi-cancelled-sub">2025 spend eliminated</div>
     </div>
 
-    <div class="kpi purple" data-icon="âï¸">
+    <div class="kpi purple" data-icon="✂️">
       <div class="kpi-label">Contract Savings</div>
-      <div class="kpi-value" id="kpi-contract">â</div>
+      <div class="kpi-value" id="kpi-contract">—</div>
       <div class="kpi-sub">Annual contract rate reductions</div>
     </div>
 
   </div>
 
-  <!-- âââââââââââââââââââââââââââââââââââââââââââââââ SAVINGS HIGHLIGHT -->
+  <!-- ═══════════════════════════════════════════════ SAVINGS HIGHLIGHT -->
   <div class="section-title">Cost Savings Summary</div>
   <div class="savings-row">
     <div class="save-card green">
       <div class="save-label">Monthly Spend Reduction</div>
-      <div class="save-value" id="save-monthly">â</div>
+      <div class="save-value" id="save-monthly">—</div>
       <div class="save-sub" id="save-monthly-sub">Per month vs. 2025 average</div>
     </div>
     <div class="save-card amber">
       <div class="save-label">Apps Streamlined</div>
-      <div class="save-value" id="save-apps">â</div>
+      <div class="save-value" id="save-apps">—</div>
       <div class="save-sub" id="save-apps-sub">Reduction in active applications</div>
     </div>
     <div class="save-card blue">
       <div class="save-label">2025 Spend Eliminated</div>
-      <div class="save-value" id="save-cancelled-spend">â</div>
+      <div class="save-value" id="save-cancelled-spend">—</div>
       <div class="save-sub">From cancelled subscriptions</div>
     </div>
     <div class="save-card purple">
       <div class="save-label">Projected Annual Saving</div>
-      <div class="save-value" id="save-annual">â</div>
+      <div class="save-value" id="save-annual">—</div>
       <div class="save-sub" id="save-annual-sub">2026 full-year projection vs. 2025 actual</div>
     </div>
   </div>
 
-  <!-- ââââââââââââââââââââââââââââââââââââââââââââââââ TREND + DEPT PIE -->
+  <!-- ════════════════════════════════════════════════ TREND + DEPT PIE -->
   <div class="section-title">Spend Trends</div>
   <div class="charts-grid">
 
     <div class="card">
-      <div class="card-title">Monthly Spend â 2025 vs. 2026</div>
-      <div class="card-sub">2025 full year actuals Â· 2026 actuals (dashed = 2026 projection)</div>
+      <div class="card-title">Monthly Spend — 2025 vs. 2026</div>
+      <div class="card-sub">2025 full year actuals · 2026 actuals (dashed = 2026 projection)</div>
       <div class="chart-wrap" style="height:280px">
         <canvas id="trendChart"></canvas>
       </div>
@@ -474,11 +474,11 @@
 
   </div>
 
-  <!-- ââââââââââââââââââââââââââââââââââââââââââââ TOP APPS + DEPT BAR -->
+  <!-- ════════════════════════════════════════════ TOP APPS + DEPT BAR -->
   <div class="charts-grid">
 
     <div class="card">
-      <div class="card-title">Top 10 Applications â 2025 Spend</div>
+      <div class="card-title">Top 10 Applications — 2025 Spend</div>
       <div class="card-sub">Full year 2025 actual spend</div>
       <div class="chart-wrap" style="height:300px">
         <canvas id="top10Chart"></canvas>
@@ -486,8 +486,8 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Department Spend â 2025 vs. 2026 YTD Annualized</div>
-      <div class="card-sub">2026 YTD Ã 3 for rough annual comparison</div>
+      <div class="card-title">Department Spend — 2025 vs. 2026 YTD Annualized</div>
+      <div class="card-sub">2026 YTD × 3 for rough annual comparison</div>
       <div class="chart-wrap" style="height:300px">
         <canvas id="deptBarChart"></canvas>
       </div>
@@ -495,11 +495,11 @@
 
   </div>
 
-  <!-- ââââââââââââââââââââââââââââââââââââââââââââââââââ APP STATUS PIE -->
+  <!-- ══════════════════════════════════════════════════ APP STATUS PIE -->
   <div class="charts-grid-3">
 
     <div class="card">
-      <div class="card-title">Application Status Breakdown â 2026</div>
+      <div class="card-title">Application Status Breakdown — 2026</div>
       <div class="card-sub">Active vs. Reduced vs. Cancelled</div>
       <div class="chart-wrap" style="height:240px">
         <canvas id="statusChart"></canvas>
@@ -515,7 +515,7 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Top 5 Active Apps â 2026 YTD</div>
+      <div class="card-title">Top 5 Active Apps — 2026 YTD</div>
       <div class="card-sub">Highest actual spend 2026</div>
       <div class="chart-wrap" style="height:240px">
         <canvas id="top5_2026Chart"></canvas>
@@ -524,7 +524,7 @@
 
   </div>
 
-  <!-- âââââââââââââââââââââââââââââââââââââââââââââââ SPEND PROJECTION -->
+  <!-- ═══════════════════════════════════════════════ SPEND PROJECTION -->
   <div class="section-title">Spend Projections &amp; Comparison</div>
   <div class="proj-card">
     <div class="card-title" style="margin-bottom:6px">2026 Full-Year Projection vs. 2025 Actual</div>
@@ -533,15 +533,15 @@
       <div class="proj-row">
         <div class="proj-meta">
           <span class="proj-name">2025 Actual Total</span>
-          <span class="proj-amt" id="proj-2025-amt">â</span>
+          <span class="proj-amt" id="proj-2025-amt">—</span>
         </div>
         <div class="proj-track"><div class="proj-fill" style="width:100%;background:#3b82f6;"></div></div>
-        <div class="proj-sub" id="proj-2025-sub">Baseline â full year</div>
+        <div class="proj-sub" id="proj-2025-sub">Baseline — full year</div>
       </div>
       <div class="proj-row">
         <div class="proj-meta">
           <span class="proj-name">2026 YTD Actual</span>
-          <span class="proj-amt" id="proj-ytd-amt">â</span>
+          <span class="proj-amt" id="proj-ytd-amt">—</span>
         </div>
         <div class="proj-track"><div class="proj-fill" id="proj-ytd-fill" style="width:0%;background:#22c55e;"></div></div>
         <div class="proj-sub" id="proj-ytd-pct">4 of 12 months completed</div>
@@ -549,35 +549,35 @@
       <div class="proj-row">
         <div class="proj-meta">
           <span class="proj-name">2026 Projected Full Year</span>
-          <span class="proj-amt" id="proj-full-amt">â</span>
+          <span class="proj-amt" id="proj-full-amt">—</span>
         </div>
         <div class="proj-track"><div class="proj-fill" id="proj-full-fill" style="width:0%;background:#f59e0b;"></div></div>
         <div class="proj-sub" id="proj-full-pct">projected full year</div>
       </div>
       <div class="proj-row">
         <div class="proj-meta">
-          <span class="proj-name" id="proj-dept1-name">Largest Dept â 2026 Annualized</span>
-          <span class="proj-amt" id="proj-dept1-amt">â</span>
+          <span class="proj-name" id="proj-dept1-name">Largest Dept — 2026 Annualized</span>
+          <span class="proj-amt" id="proj-dept1-amt">—</span>
         </div>
         <div class="proj-track"><div class="proj-fill" id="proj-dept1-fill" style="width:0%;background:#7c3aed;"></div></div>
-        <div class="proj-sub" id="proj-dept1-sub">YTD Ã 3 annualized</div>
+        <div class="proj-sub" id="proj-dept1-sub">YTD × 3 annualized</div>
       </div>
       <div class="proj-row">
         <div class="proj-meta">
-          <span class="proj-name" id="proj-dept2-name">Finance Dept â 2026 Annualized</span>
-          <span class="proj-amt" id="proj-dept2-amt">â</span>
+          <span class="proj-name" id="proj-dept2-name">Finance Dept — 2026 Annualized</span>
+          <span class="proj-amt" id="proj-dept2-amt">—</span>
         </div>
         <div class="proj-track"><div class="proj-fill" id="proj-dept2-fill" style="width:0%;background:#14b8a6;"></div></div>
-        <div class="proj-sub" id="proj-dept2-sub">YTD Ã 3 annualized</div>
+        <div class="proj-sub" id="proj-dept2-sub">YTD × 3 annualized</div>
       </div>
     </div>
   </div>
 
-  <!-- âââââââââââââââââââââââââââââââââââââââââââââââ APP TABLE -->
-  <div class="section-title">All Applications â Searchable &amp; Filterable</div>
+  <!-- ═══════════════════════════════════════════════ APP TABLE -->
+  <div class="section-title">All Applications — Searchable &amp; Filterable</div>
   <div class="table-card">
     <div class="table-controls">
-      <input type="text" class="search-input" id="searchInput" placeholder="ð  Search by application nameâ¦" oninput="filterTable()" />
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍  Search by application name…" oninput="filterTable()" />
       <select class="filter-select" id="deptFilter" onchange="filterTable()">
         <option value="">All Departments</option>
         <option value="AMF">AMF</option>
@@ -596,10 +596,10 @@
         <option value="Cancelled">Cancelled</option>
       </select>
       <select class="filter-select" id="sortField" onchange="filterTable()">
-        <option value="spend2025">Sort: 2025 Spend â</option>
-        <option value="spend2026">Sort: 2026 YTD â</option>
-        <option value="savings">Sort: Savings â</option>
-        <option value="name">Sort: Name AâZ</option>
+        <option value="spend2025">Sort: 2025 Spend ↓</option>
+        <option value="spend2026">Sort: 2026 YTD ↓</option>
+        <option value="savings">Sort: Savings ↓</option>
+        <option value="name">Sort: Name A–Z</option>
       </select>
     </div>
 
@@ -621,7 +621,7 @@
       <div id="noResults" class="no-results" style="display:none">No applications match your filters.</div>
     </div>
     <div class="table-footer">
-      <span id="tableCount">Loadingâ¦</span>
+      <span id="tableCount">Loading…</span>
       <span>Click column headers to sort</span>
     </div>
   </div>
@@ -629,11 +629,11 @@
 </main>
 
 <footer>
-  American Flat IT SaaS Dashboard Â· Live data from Google Sheets Â· <span id="footer-time">â</span>
+  American Flat IT SaaS Dashboard · Live data from Google Sheets · <span id="footer-time">—</span>
 </footer>
 
 <script>
-// âââââââââââââââââââââââââââââââââââââââââââââââââââ CONFIG
+// ═══════════════════════════════════════════════════ CONFIG
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycby3jWg3JxSxiH1MQtPnaowcHf3vqpLFp0jQmu45HEp7DoNE5mvRznulNb4l-DS_u2b4bg/exec';
 
 const DEPT_COLORS = {
@@ -652,18 +652,18 @@ let appsData = [];
 let currentSort = 'spend2025';
 let sortDir = -1;
 
-// âââââââââââââââââââââââââââââââââââââââââââââââââââ HELPERS
+// ═══════════════════════════════════════════════════ HELPERS
 function fmt(v) {
-  if (!v || v === 0) return '$â';
+  if (!v || v === 0) return '$—';
   return '$' + Math.round(v).toLocaleString('en-US', { maximumFractionDigits: 0 });
 }
 
 function fmtFull(v) {
-  if (!v || v === 0) return '$â';
+  if (!v || v === 0) return '$—';
   return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 }
 
-// âââââââââââââââââââââââââââââââââââââââââââââââââââ MAIN LOAD
+// ═══════════════════════════════════════════════════ MAIN LOAD
 async function loadDashboard() {
   const banner = document.getElementById('loading-banner');
 
@@ -674,7 +674,7 @@ async function loadDashboard() {
     if (d.error) throw new Error(d.error);
   } catch (e) {
     banner.className = 'loading-banner error-banner';
-    banner.innerHTML = 'â ï¸ Could not load live data. Please check the Google Apps Script deployment. Error: ' + e.message;
+    banner.innerHTML = '⚠️ Could not load live data. Please check the Google Apps Script deployment. Error: ' + e.message;
     return;
   }
 
@@ -686,7 +686,7 @@ async function loadDashboard() {
   const monthly25 = d.monthly25 || [];
   const actMonths = monthly26.filter(v => v > 0).length || 1;
 
-  // ââ KPIs ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── KPIs ──────────────────────────────────────────────────────────
   const avg25month = k.total25 / 12;
   const monthlyReduction = avg25month - k.avg26;
   const annualSavings = k.savedVs25; // positive = saving vs 2025
@@ -710,42 +710,42 @@ async function loadDashboard() {
   const totalApps = k.activeCount + k.reducedCount + k.cancelledCount;
   const activeTotal = k.activeCount + k.reducedCount;
 
-  document.getElementById('kpi-total25-sub').textContent = totalApps + ' tracked apps Â· full year actual';
-  document.getElementById('kpi-ytd26-sub').textContent = activeTotal + ' active apps Â· ' + actMonths + ' months actual';
+  document.getElementById('kpi-total25-sub').textContent = totalApps + ' tracked apps · full year actual';
+  document.getElementById('kpi-ytd26-sub').textContent = activeTotal + ' active apps · ' + actMonths + ' months actual';
   document.getElementById('kpi-proj26-sub').textContent = 'Based on $' + Math.round(k.avg26).toLocaleString() + ' / mo average';
   document.getElementById('kpi-cancelled-sub').textContent = '$' + Math.round(cancelledSpend).toLocaleString() + ' in 2025 spend eliminated';
 
   const deltaEl = document.getElementById('kpi-ytd26-delta');
-  deltaEl.textContent = (monthlyReduction >= 0 ? 'â¼ $' : 'â² $') + Math.abs(Math.round(monthlyReduction)).toLocaleString() + '/mo vs 2025 avg';
+  deltaEl.textContent = (monthlyReduction >= 0 ? '▼ $' : '▲ $') + Math.abs(Math.round(monthlyReduction)).toLocaleString() + '/mo vs 2025 avg';
   deltaEl.className = 'kpi-delta ' + (monthlyReduction >= 0 ? 'down' : 'up');
 
   const projDeltaEl = document.getElementById('kpi-proj26-delta');
-  projDeltaEl.textContent = (annualSavings >= 0 ? 'â¼ $' : 'â² $') + Math.abs(Math.round(annualSavings)).toLocaleString() + ' vs 2025';
+  projDeltaEl.textContent = (annualSavings >= 0 ? '▼ $' : '▲ $') + Math.abs(Math.round(annualSavings)).toLocaleString() + ' vs 2025';
   projDeltaEl.className = 'kpi-delta ' + (annualSavings >= 0 ? 'save' : 'up');
 
-  // ââ Savings Row ââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── Savings Row ──────────────────────────────────────────────────
   document.getElementById('save-monthly').textContent = '$' + Math.abs(Math.round(monthlyReduction)).toLocaleString();
-  document.getElementById('save-monthly-sub').textContent = 'Per month vs. 2025 average ($' + Math.round(avg25month).toLocaleString() + ' â $' + Math.round(k.avg26).toLocaleString() + ')';
-  document.getElementById('save-apps').textContent = totalApps + ' â ' + activeTotal;
+  document.getElementById('save-monthly-sub').textContent = 'Per month vs. 2025 average ($' + Math.round(avg25month).toLocaleString() + ' → $' + Math.round(k.avg26).toLocaleString() + ')';
+  document.getElementById('save-apps').textContent = totalApps + ' → ' + activeTotal;
   document.getElementById('save-apps-sub').textContent = Math.round((1 - activeTotal / totalApps) * 100) + '% reduction in active applications';
   document.getElementById('save-cancelled-spend').textContent = '$' + Math.round(cancelledSpend).toLocaleString();
   document.getElementById('save-annual').textContent = '$' + Math.abs(Math.round(annualSavings)).toLocaleString();
 
-  // ââ Projection Bars âââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── Projection Bars ───────────────────────────────────────────────
   const baseline = k.total25;
   document.getElementById('proj-2025-amt').textContent = fmt(k.total25);
-  document.getElementById('proj-2025-sub').textContent = 'Baseline â ' + totalApps + ' apps Â· 12 months';
+  document.getElementById('proj-2025-sub').textContent = 'Baseline — ' + totalApps + ' apps · 12 months';
   document.getElementById('proj-ytd-amt').textContent = fmt(k.ytd26);
   document.getElementById('proj-full-amt').textContent = fmt(k.proj26);
   document.getElementById('proj-card-sub').textContent = 'Projection based on $' + Math.round(k.avg26).toLocaleString() + '/month average (' + actMonths + ' months actual)';
 
   const ytdPct = (k.ytd26 / baseline * 100);
   document.getElementById('proj-ytd-fill').style.width = Math.min(ytdPct, 100).toFixed(1) + '%';
-  document.getElementById('proj-ytd-pct').textContent = ytdPct.toFixed(1) + '% of 2025 baseline Â· ' + actMonths + ' of 12 months completed';
+  document.getElementById('proj-ytd-pct').textContent = ytdPct.toFixed(1) + '% of 2025 baseline · ' + actMonths + ' of 12 months completed';
 
   const projPct = (k.proj26 / baseline * 100);
   document.getElementById('proj-full-fill').style.width = Math.min(projPct, 100).toFixed(1) + '%';
-  document.getElementById('proj-full-pct').textContent = projPct.toFixed(1) + '% of 2025 baseline Â· projected $' + Math.abs(Math.round(annualSavings)).toLocaleString() + ' savings';
+  document.getElementById('proj-full-pct').textContent = projPct.toFixed(1) + '% of 2025 baseline · projected $' + Math.abs(Math.round(annualSavings)).toLocaleString() + ' savings';
 
   // Top 2 depts by 2025 spend
   const dept25 = d.dept25 || {};
@@ -756,28 +756,28 @@ async function loadDashboard() {
     const d1 = deptsSorted[0];
     const ann1 = (dept26[d1] || 0) * (12 / actMonths);
     const savd1 = dept25[d1] - ann1;
-    document.getElementById('proj-dept1-name').textContent = d1 + ' (Largest Dept) â 2026 Annualized';
+    document.getElementById('proj-dept1-name').textContent = d1 + ' (Largest Dept) — 2026 Annualized';
     document.getElementById('proj-dept1-amt').textContent = '~$' + Math.round(ann1).toLocaleString();
     document.getElementById('proj-dept1-fill').style.width = Math.min(ann1 / baseline * 100, 100).toFixed(1) + '%';
-    document.getElementById('proj-dept1-sub').textContent = '$' + Math.round(dept26[d1] || 0).toLocaleString() + ' YTD Ã ' + (12 / actMonths).toFixed(0) + ' â vs. $' + Math.round(dept25[d1]).toLocaleString() + ' in 2025 (' + (savd1 >= 0 ? 'saves' : 'costs') + ' ~$' + Math.abs(Math.round(savd1)).toLocaleString() + ')';
+    document.getElementById('proj-dept1-sub').textContent = '$' + Math.round(dept26[d1] || 0).toLocaleString() + ' YTD × ' + (12 / actMonths).toFixed(0) + ' — vs. $' + Math.round(dept25[d1]).toLocaleString() + ' in 2025 (' + (savd1 >= 0 ? 'saves' : 'costs') + ' ~$' + Math.abs(Math.round(savd1)).toLocaleString() + ')';
   }
 
   const finDept = deptsSorted.find(d => d.toLowerCase().includes('finance')) || deptsSorted[1];
   if (finDept) {
     const ann2 = (dept26[finDept] || 0) * (12 / actMonths);
     const savd2 = dept25[finDept] - ann2;
-    document.getElementById('proj-dept2-name').textContent = finDept + ' Dept â 2026 Annualized';
+    document.getElementById('proj-dept2-name').textContent = finDept + ' Dept — 2026 Annualized';
     document.getElementById('proj-dept2-amt').textContent = '~$' + Math.round(ann2).toLocaleString();
     document.getElementById('proj-dept2-fill').style.width = Math.min(ann2 / baseline * 100, 100).toFixed(1) + '%';
-    document.getElementById('proj-dept2-sub').textContent = '$' + Math.round(dept26[finDept] || 0).toLocaleString() + ' YTD Ã ' + (12 / actMonths).toFixed(0) + ' â vs. $' + Math.round(dept25[finDept] || 0).toLocaleString() + ' in 2025 (' + (savd2 >= 0 ? 'saves' : 'costs') + ' ~$' + Math.abs(Math.round(savd2)).toLocaleString() + ')';
+    document.getElementById('proj-dept2-sub').textContent = '$' + Math.round(dept26[finDept] || 0).toLocaleString() + ' YTD × ' + (12 / actMonths).toFixed(0) + ' — vs. $' + Math.round(dept25[finDept] || 0).toLocaleString() + ' in 2025 (' + (savd2 >= 0 ? 'saves' : 'costs') + ' ~$' + Math.abs(Math.round(savd2)).toLocaleString() + ')';
   }
 
-  // ââ Apps data for table & charts ââââââââââââââââââââââââââââââââââ
+  // ── Apps data for table & charts ──────────────────────────────────
   appsData = d.apps.map(a => {
     const ms = (a.s25 / 12) - (a.s26 / actMonths);
     return {
       ...a,
-      billing: a.renewal || 'â',
+      billing: a.renewal || '—',
       mthSavings: ms,
       label: ms >= 0
         ? '$' + Math.round(ms * 12).toLocaleString('en-US', { maximumFractionDigits: 0 })
@@ -785,11 +785,11 @@ async function loadDashboard() {
     };
   });
 
-  // ââ Dept pie subtitle âââââââââââââââââââââââââââââââââââââââââââââ
+  // ── Dept pie subtitle ─────────────────────────────────────────────
   const ytdTotal = Object.values(dept26).reduce((s, v) => s + v, 0);
   document.getElementById('deptPie-sub').textContent = 'YTD 2026 actual ($' + Math.round(ytdTotal).toLocaleString() + ' total)';
 
-  // ââ Build all charts ââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── Build all charts ──────────────────────────────────────────────
   buildTrendChart(monthly25, monthly26, k.avg26, actMonths);
   buildDeptPieChart(dept26, ytdTotal);
   buildTop10Chart(d.top10_25 || []);
@@ -798,17 +798,17 @@ async function loadDashboard() {
   buildMonthly2026Chart(monthly26);
   buildTop5Chart(d.top5_26 || []);
 
-  // ââ Table âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── Table ─────────────────────────────────────────────────────────
   filterTable();
 
-  // ââ Header badge & footer ââââââââââââââââââââââââââââââââââââââââââ
+  // ── Header badge & footer ──────────────────────────────────────────
   const genDate = new Date(d.generatedAt);
   const ts = genDate.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
   document.getElementById('header-badge').textContent = 'Updated: ' + ts;
   document.getElementById('footer-time').textContent = ts;
 }
 
-// âââââââââââââââââââââââââââââââââââââââââââââââââââ CHART BUILDERS
+// ═══════════════════════════════════════════════════ CHART BUILDERS
 
 function buildTrendChart(data25, data26, avg26, actMonths) {
   const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1009,7 +1009,7 @@ function buildTop5Chart(top5) {
   new Chart(document.getElementById('top5_2026Chart'), {
     type: 'bar', plugins: [ChartDataLabels],
     data: {
-      labels: top5.map(a => a.name.length > 18 ? a.name.slice(0, 17) + 'â¦' : a.name),
+      labels: top5.map(a => a.name.length > 18 ? a.name.slice(0, 17) + '…' : a.name),
       datasets: [{ label: '2026 YTD', data: top5.map(a => a.value), backgroundColor: top5.map((_, i) => `hsla(${150 + i * 25},70%,50%,0.8)`), borderRadius: 6 }]
     },
     options: {
@@ -1032,7 +1032,7 @@ function buildTop5Chart(top5) {
   });
 }
 
-// âââââââââââââââââââââââââââââââââââââââââââââââââââ TABLE
+// ═══════════════════════════════════════════════════ TABLE
 function setSortField(f) {
   if (currentSort === f) { sortDir *= -1; } else { currentSort = f; sortDir = -1; }
   document.getElementById('sortField').value = f;
