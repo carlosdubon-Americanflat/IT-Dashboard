@@ -848,7 +848,7 @@ const deptColors = {
       responsive:true, maintainAspectRatio:false,
       layout:{ padding:{ top:20 } },
       plugins:{
-        legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } },
+        legend:{ position;'bottom', labels:{ boxWidth:12, font:{size:11} } },
         tooltip:{ callbacks:{ label: ctx => ` $${ctx.raw.toLocaleString()}` } },
         datalabels:{
           anchor:'end', align:'top',
@@ -974,4 +974,45 @@ function setSortField(f) {
 
 function fmt(v) {
   if (!v || v === 0) return '$—';
-  return '$' + v.toLocaleString('en-US',{minimumFractionDigits
+  return '$' + v.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+
+function filterTable() {
+  const q  = document.getElementById('searchInput').value.toLowerCase();
+  const dp = document.getElementById('deptFilter').value;
+  const st = document.getElementById('statusFilter').value;
+
+  let rows = apps.filter(a => {
+    if (q && !a.name.toLowerCase().includes(q)) return false;
+    if (dp && a.dept !== dp) return false;
+    if (st && a.status !== st) return false;
+    return true;
+  });
+
+  rows.sort((a, b) => {
+    if (currentSort === 'name') return sortDir * a.name.localeCompare(b.name);
+    const k = currentSort === 'spend2026' ? 's26' : currentSort === 'savings' ? 'mtSavings' : 's25';
+    return sortDir * ((b[k]||0) - (a[k]||0));
+  });
+
+  document.getElementById('tableBody').innerHTML = rows.map(a => `
+    <tr>
+      <td>${a.name}</td>
+      <td><span class="dept-chip">${a.dept}</span></td>
+      <td>${a.billing}</td>
+      <td><span class="status-badge status-${a.status}">${a.status}</span></td>
+      <td style="text-align:right">${fmt(a.s25)}</td>
+      <td style="text-align:right">${fmt(a.s26)}</td>
+      <td class="${a.mtSavings >= 0 ? 'savings-pos' : 'savings-neg'}">${a.label}</td>
+    </tr>`).join('');
+
+  const tot = rows.length;
+  document.getElementById('tableCount').textContent =
+    tot + ' application' + (tot !== 1 ? 's' : '') + ' shown';
+  document.getElementById('noResults').style.display = tot ? 'none' : 'block';
+}
+
+filterTable();
+</script>
+</body>
+</html>
