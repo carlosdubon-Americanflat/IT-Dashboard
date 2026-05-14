@@ -478,7 +478,7 @@ function buildCharts({ kpis, monthly26, monthly25, dept25, dept26, top10_25, top
         borderWidth:2, borderColor:'#fff', hoverOffset:5 }]
     },
     options: { responsive:true, maintainAspectRatio:false,
-      plugins: { legend:{ position:'right', labels:{bsxWidth:11,font:{size:9},padding:6} },
+      plugins: { legend:{ position:'right', labels:{boxWidth:11,font:{size:9},padding:6} },
         tooltip:{ callbacks:{ label:ctx=>` ${ctx.label}: ${fmt(ctx.raw)} (${pct(ctx.raw,kpis.ytd26)})` } } } }
   });
 
