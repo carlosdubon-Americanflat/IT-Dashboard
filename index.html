@@ -1051,3 +1051,38 @@ function filterTable() {
     if (dp && a.dept !== dp) return false;
     if (st && a.status !== st) return false;
     return true
+
+  });
+
+  // Sort
+  const sortKey = { name: 'name', spend2025: 's25', spend2026: 's26', savings: 'mthSavings' };
+  if (currentSort && sortKey[currentSort]) {
+    const k = sortKey[currentSort];
+    rows.sort((a, b) => {
+      const av = a[k], bv = b[k];
+      if (typeof av === 'string') return sortDir * av.localeCompare(bv);
+      return sortDir * ((av || 0) - (bv || 0));
+    });
+  }
+
+  document.getElementById('tableBody').innerHTML = rows.map(a => `
+    <tr>
+      <td>${a.name}</td>
+      <td><span class="dept-chip">${a.dept}</span></td>
+      <td>${a.billing || a.renewal || '—'}</td>
+      <td><span class="status-badge status-${a.status}">${a.status}</span></td>
+      <td style="text-align:right">${fmtFull(a.s25)}</td>
+      <td style="text-align:right">${fmtFull(a.s26)}</td>
+      <td class="${a.mthSavings >= 0 ? 'savings-pos' : 'savings-neg'}">${a.label}</td>
+    </tr>`).join('');
+
+  const tot = rows.length;
+  document.getElementById('tableCount').textContent = tot + ' application' + (tot !== 1 ? 's' : '') + ' shown';
+  document.getElementById('noResults').style.display = tot ? 'none' : 'block';
+}
+
+// ═══════════════════════════════════════════════════ INIT
+loadDashboard();
+</script>
+</body>
+</html>
