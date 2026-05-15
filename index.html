@@ -687,7 +687,7 @@ async function loadDashboard() {
   const actMonths = monthly26.filter(v => v > 0).length || 1;
 
   // ── KPIs ──────────────────────────────────────────────────────────
-  const avg25month = k.total25 / 12;
+  const avg25month = 33000; // fixed 2025 monthly baseline
   const monthlyReduction = avg25month - k.avg26;
   const annualSavings = k.savedVs25; // positive = saving vs 2025
 
