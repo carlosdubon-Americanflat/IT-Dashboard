@@ -194,7 +194,24 @@
     }
     .chart-wrap { position: relative; }
 
-    /* ── SAVINGS HIGHLIGHT ───────────────────────────────────── */
+    /* ── HIGHLIGHTS BANNER ───────────────────────────────────── */
+    .highlights-section { margin-bottom: 32px; }
+    .highlights-title { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--slate-500); margin-bottom: 12px; }
+    .highlights-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+    @media (max-width: 1100px) { .highlights-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 600px)  { .highlights-grid { grid-template-columns: 1fr; } }
+    .highlight-card { border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 4px; border: 1px solid transparent; position: relative; overflow: hidden; }
+    .highlight-card::before { content: attr(data-icon); position: absolute; right: 14px; top: 12px; font-size: 1.5rem; opacity: .18; }
+    .highlight-card.green  { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border-color: #86efac; }
+    .highlight-card.blue   { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #93c5fd; }
+    .highlight-card.amber  { background: linear-gradient(135deg,#fffbeb,#fef3c7); border-color: #fcd34d; }
+    .highlight-card.red    { background: linear-gradient(135deg,#fef2f2,#fee2e2); border-color: #fca5a5; }
+    .highlight-card.purple { background: linear-gradient(135deg,#faf5ff,#ede9fe); border-color: #c4b5fd; }
+    .hl-label { font-size: .65rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--slate-500); }
+    .hl-value { font-size: 1.4rem; font-weight: 800; color: var(--slate-900); line-height: 1.1; }
+    .hl-sub   { font-size: .75rem; color: var(--slate-700); margin-top: 2px; }
+
+        /* ── SAVINGS HIGHLIGHT ───────────────────────────────────── */
     .savings-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -381,6 +398,12 @@
   <div class="loading-banner" id="loading-banner">
     <div class="spinner"></div>
     <span>Loading live data from Google Sheets…</span>
+  </div>
+
+  <!-- HIGHLIGHTS -->
+  <div class="highlights-section" id="highlights-section" style="display:none">
+    <div class="highlights-title">✨ 2026 Highlights</div>
+    <div class="highlights-grid" id="highlights-grid"></div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════ KPI CARDS -->
@@ -680,6 +703,9 @@ async function loadDashboard() {
 
   // Hide loading banner
   banner.style.display = 'none';
+
+  // Build highlights
+  buildHighlights(d);
 
   const k = d.kpis;
   const monthly26 = d.monthly26 || [];
@@ -1084,6 +1110,71 @@ function filterTable() {
   const tot = rows.length;
   document.getElementById('tableCount').textContent = tot + ' application' + (tot !== 1 ? 's' : '') + ' shown';
   document.getElementById('noResults').style.display = tot ? 'none' : 'block';
+}
+
+// ══════════════════════════════════════════════ HIGHLIGHTS
+const CUSTOM_HIGHLIGHTS = [
+  // Add your own callouts here:
+  // { label: 'My Win', value: 'Great result', sub: 'Details here', color: 'green', icon: '🎯' },
+];
+
+function buildHighlights(d) {
+  const section = document.getElementById('highlights-section');
+  const grid    = document.getElementById('highlights-grid');
+  const k       = d.kpis;
+  const monthly26 = d.monthly26 || [];
+  const monthly25 = d.monthly25 || [];
+  const actMonths = monthly26.filter(v => v > 0).length || 1;
+  const months = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const auto = [];
+
+  // Top cost reduction app
+  const reduced = (d.apps || []).filter(a => a.status === 'Reduced' && a.s25 > 0);
+  if (reduced.length) {
+    const best = reduced.map(a => {
+      const s25ytd = a.s25ytd > 0 ? a.s25ytd : (a.s25 * actMonths / 12);
+      return { ...a, saving: s25ytd - a.s26 };
+    }).sort((a, b) => b.saving - a.saving)[0];
+    if (best && best.saving > 0)
+      auto.push({ label: 'Top Cost Reduction', value: '$' + Math.round(best.saving).toLocaleString(),
+        sub: best.name + ' · Jan–' + months[actMonths] + ' YTD savings', color: 'green', icon: '🏆' });
+  }
+
+  // Cancelled apps
+  const cancelled = (d.apps || []).filter(a => a.status === 'Cancelled');
+  if (cancelled.length) {
+    const spend = cancelled.reduce((s, a) => s + a.s25, 0);
+    auto.push({ label: 'Apps Cancelled', value: cancelled.length + ' apps',
+      sub: '$' + Math.round(spend).toLocaleString() + ' in 2025 annual spend eliminated', color: 'red', icon: '🚫' });
+  }
+
+  // YTD vs same period 2025
+  if (monthly25.length && monthly26.length) {
+    const ytd25 = monthly25.slice(0, actMonths).reduce((s, v) => s + (v || 0), 0);
+    const ytd26 = monthly26.slice(0, actMonths).reduce((s, v) => s + (v || 0), 0);
+    const pct = ytd25 > 0 ? Math.round((1 - ytd26 / ytd25) * 100) : 0;
+    if (pct !== 0)
+      auto.push({ label: 'YTD Spend vs 2025', value: (pct >= 0 ? '▼ ' : '▲ ') + Math.abs(pct) + '%',
+        sub: '$' + Math.round(ytd26).toLocaleString() + ' vs $' + Math.round(ytd25).toLocaleString() + ' same period last year',
+        color: pct >= 0 ? 'blue' : 'amber', icon: pct >= 0 ? '📉' : '📈' });
+  }
+
+  // Projected full-year saving
+  const proj26fixed = k.ytd26 + 33000 * (12 - actMonths);
+  const projSaving  = k.total25 - proj26fixed;
+  if (projSaving > 0)
+    auto.push({ label: 'Projected Full-Year Saving', value: '$' + Math.round(projSaving).toLocaleString(),
+      sub: 'vs $' + Math.round(k.total25).toLocaleString() + ' spent in 2025', color: 'purple', icon: '📊' });
+
+  const all = [...auto, ...CUSTOM_HIGHLIGHTS];
+  if (!all.length) return;
+  grid.innerHTML = all.map(h =>
+    '<div class="highlight-card ' + h.color + '" data-icon="' + h.icon + '">' +
+    '<div class="hl-label">' + h.label + '</div>' +
+    '<div class="hl-value">' + h.value + '</div>' +
+    '<div class="hl-sub">'   + h.sub   + '</div></div>'
+  ).join('');
+  section.style.display = 'block';
 }
 
 // ═══════════════════════════════════════════════════ INIT
