@@ -687,13 +687,14 @@ async function loadDashboard() {
   const actMonths = monthly26.filter(v => v > 0).length || 1;
 
   // ── KPIs ──────────────────────────────────────────────────────────
-  const avg25month = 33000; // fixed 2025 monthly baseline
+  const avg25month = k.total25 / 12;
   const monthlyReduction = avg25month - k.avg26;
-  const annualSavings = k.savedVs25; // positive = saving vs 2025
+  const proj26fixed = k.ytd26 + 33000 * (12 - actMonths); // projection based on $33K/mo for remaining months
+  const annualSavings = k.total25 - proj26fixed; // savings vs 2025 using fixed projection
 
   document.getElementById('kpi-total25').textContent = fmt(k.total25);
   document.getElementById('kpi-ytd26').textContent = fmt(k.ytd26);
-  document.getElementById('kpi-proj26').textContent = fmt(k.proj26);
+  document.getElementById('kpi-proj26').textContent = fmt(proj26fixed);
   document.getElementById('kpi-cancelled').textContent = k.cancelledCount;
 
   // Annual savings from reduced apps — same-period comparison (Jan–Apr 2025 vs Jan–Apr 2026)
@@ -713,7 +714,7 @@ async function loadDashboard() {
 
   document.getElementById('kpi-total25-sub').textContent = totalApps + ' tracked apps · full year actual';
   document.getElementById('kpi-ytd26-sub').textContent = activeTotal + ' active apps · ' + actMonths + ' months actual';
-  document.getElementById('kpi-proj26-sub').textContent = 'Based on $' + Math.round(k.avg26).toLocaleString() + ' / mo average';
+  document.getElementById('kpi-proj26-sub').textContent = 'Based on $33,000/mo for remaining ' + (12 - actMonths) + ' months';
   document.getElementById('kpi-cancelled-sub').textContent = '$' + Math.round(cancelledSpend).toLocaleString() + ' in 2025 spend eliminated';
 
   const deltaEl = document.getElementById('kpi-ytd26-delta');
@@ -737,14 +738,14 @@ async function loadDashboard() {
   document.getElementById('proj-2025-amt').textContent = fmt(k.total25);
   document.getElementById('proj-2025-sub').textContent = 'Baseline — ' + totalApps + ' apps · 12 months';
   document.getElementById('proj-ytd-amt').textContent = fmt(k.ytd26);
-  document.getElementById('proj-full-amt').textContent = fmt(k.proj26);
-  document.getElementById('proj-card-sub').textContent = 'Projection based on $' + Math.round(k.avg26).toLocaleString() + '/month average (' + actMonths + ' months actual)';
+  document.getElementById('proj-full-amt').textContent = fmt(proj26fixed);
+  document.getElementById('proj-card-sub').textContent = 'Projection based on $33,000/month for remaining ' + (12 - actMonths) + ' months (' + actMonths + ' months actual)';
 
   const ytdPct = (k.ytd26 / baseline * 100);
   document.getElementById('proj-ytd-fill').style.width = Math.min(ytdPct, 100).toFixed(1) + '%';
   document.getElementById('proj-ytd-pct').textContent = ytdPct.toFixed(1) + '% of 2025 baseline · ' + actMonths + ' of 12 months completed';
 
-  const projPct = (k.proj26 / baseline * 100);
+  const projPct = (proj26fixed / baseline * 100);
   document.getElementById('proj-full-fill').style.width = Math.min(projPct, 100).toFixed(1) + '%';
   document.getElementById('proj-full-pct').textContent = projPct.toFixed(1) + '% of 2025 baseline · projected $' + Math.abs(Math.round(annualSavings)).toLocaleString() + ' savings';
 
@@ -794,7 +795,7 @@ async function loadDashboard() {
   document.getElementById('deptPie-sub').textContent = 'YTD 2026 actual ($' + Math.round(ytdTotal).toLocaleString() + ' total)';
 
   // ── Build all charts ──────────────────────────────────────────────
-  buildTrendChart(monthly25, monthly26, k.avg26, actMonths);
+  buildTrendChart(monthly25, monthly26, 33000, actMonths);
   buildDeptPieChart(dept26, ytdTotal);
   buildTop10Chart(d.top10_25 || []);
   buildDeptBarChart(dept25, dept26, actMonths);
