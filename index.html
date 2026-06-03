@@ -443,9 +443,9 @@
   <div class="section-title">Cost Savings Summary</div>
   <div class="savings-row">
     <div class="save-card green">
-      <div class="save-label">Monthly Spend Reduction</div>
+      <div class="save-label">YTD Spend Reduction</div>
       <div class="save-value" id="save-monthly">—</div>
-      <div class="save-sub" id="save-monthly-sub">Per month vs. 2025 average</div>
+      <div class="save-sub" id="save-monthly-sub">Actual 2025 vs 2026, same months</div>
     </div>
     <div class="save-card amber">
       <div class="save-label">Apps Streamlined</div>
@@ -715,8 +715,13 @@ async function loadDashboard() {
   projDeltaEl.className = 'kpi-delta ' + (annualSavings >= 0 ? 'save' : 'up');
 
   // ── Savings Row ──────────────────────────────────────────────────
-  document.getElementById('save-monthly').textContent = '$' + Math.abs(Math.round(monthlyReduction)).toLocaleString();
-  document.getElementById('save-monthly-sub').textContent = 'Per month vs. 2025 average ($' + Math.round(avg25month).toLocaleString() + ' → $' + Math.round(k.avg26).toLocaleString() + ')';
+  // YTD Spend Reduction: actual 2025 vs actual 2026 for the same months (all months with 2026 data)
+  const MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const ytd25same = monthly25.slice(0, actMonths).reduce((s, v) => s + (v || 0), 0);
+  const ytd26same = monthly26.slice(0, actMonths).reduce((s, v) => s + (v || 0), 0);
+  const ytdReduction = ytd25same - ytd26same;
+  document.getElementById('save-monthly').textContent = (ytdReduction < 0 ? '−$' : '$') + Math.abs(Math.round(ytdReduction)).toLocaleString();
+  document.getElementById('save-monthly-sub').textContent = '2025 Jan–' + MO[actMonths - 1] + ' ($' + Math.round(ytd25same).toLocaleString() + ') vs 2026 ($' + Math.round(ytd26same).toLocaleString() + ')';
   document.getElementById('save-apps').textContent = totalApps + ' → ' + activeTotal;
   document.getElementById('save-apps-sub').textContent = Math.round((1 - activeTotal / totalApps) * 100) + '% reduction in active applications';
 
