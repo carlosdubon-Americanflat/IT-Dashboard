@@ -118,7 +118,7 @@
     /* ── KPI CARDS ───────────────────────────────────────────── */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin-bottom: 32px;
     }
@@ -424,12 +424,6 @@
       <div class="kpi-delta down" id="kpi-ytd26-delta">—</div>
     </div>
 
-    <div class="kpi green" data-icon="🏆">
-      <div class="kpi-label">Annual Savings YTD</div>
-      <div class="kpi-value" id="kpi-annualsavings">—</div>
-      <div class="kpi-sub">Reduction in contracted annual spend</div>
-    </div>
-
     <div class="kpi amber" data-icon="📈">
       <div class="kpi-label">2026 Full-Year Projection</div>
       <div class="kpi-value" id="kpi-proj26">—</div>
@@ -441,12 +435,6 @@
       <div class="kpi-label">Apps Cancelled</div>
       <div class="kpi-value" id="kpi-cancelled">—</div>
       <div class="kpi-sub" id="kpi-cancelled-sub">2025 spend eliminated</div>
-    </div>
-
-    <div class="kpi purple" data-icon="✂️">
-      <div class="kpi-label">Contract Savings</div>
-      <div class="kpi-value" id="kpi-contract">—</div>
-      <div class="kpi-sub">Annual contract rate reductions</div>
     </div>
 
   </div>
@@ -493,25 +481,13 @@
 
   </div>
 
-  <!-- ════════════════════════════════════════════ TOP APPS + DEPT BAR -->
-  <div class="charts-grid">
-
-    <div class="card">
-      <div class="card-title">Top 10 Applications — 2025 Spend</div>
-      <div class="card-sub">Full year 2025 actual spend</div>
-      <div class="chart-wrap" style="height:300px">
-        <canvas id="top10Chart"></canvas>
-      </div>
+  <!-- ════════════════════════════════════════════════════ TOP APPS -->
+  <div class="card" style="margin-bottom:24px">
+    <div class="card-title">Top 10 Applications — 2025 Spend</div>
+    <div class="card-sub">Full year 2025 actual spend</div>
+    <div class="chart-wrap" style="height:300px">
+      <canvas id="top10Chart"></canvas>
     </div>
-
-    <div class="card">
-      <div class="card-title">Department Spend — 2025 vs. 2026 YTD Annualized</div>
-      <div class="card-sub">2026 YTD × 3 for rough annual comparison</div>
-      <div class="chart-wrap" style="height:300px">
-        <canvas id="deptBarChart"></canvas>
-      </div>
-    </div>
-
   </div>
 
   <!-- ══════════════════════════════════════════════════ APP STATUS PIE -->
@@ -721,17 +697,6 @@ async function loadDashboard() {
   document.getElementById('kpi-proj26').textContent = fmt(proj26fixed);
   document.getElementById('kpi-cancelled').textContent = k.cancelledCount;
 
-  // Annual savings from reduced apps — same-period comparison (Jan–Apr 2025 vs Jan–Apr 2026)
-  const contractSavingsAnn = d.apps.reduce((sum, a) => {
-    if (a.status === 'Reduced' && a.s25 > 0 && a.s26 > 0) {
-      const s25ytd = a.s25ytd > 0 ? a.s25ytd : (a.s25 * actMonths / 12);
-      return sum + (s25ytd - a.s26);
-    }
-    return sum;
-  }, 0);
-  document.getElementById('kpi-annualsavings').textContent = fmt(Math.max(0, contractSavingsAnn));
-  document.getElementById('kpi-contract').textContent = fmt(Math.max(0, contractSavingsAnn));
-
   const cancelledSpend = d.apps.filter(a => a.status === 'Cancelled').reduce((s, a) => s + a.s25, 0);
   const totalApps = k.activeCount + k.reducedCount + k.cancelledCount;
   const activeTotal = k.activeCount + k.reducedCount;
@@ -826,7 +791,6 @@ async function loadDashboard() {
   buildTrendChart(monthly25, monthly26, 33000, actMonths);
   buildDeptPieChart(dept26, ytdTotal);
   buildTop10Chart(d.top10_25 || []);
-  buildDeptBarChart(dept25, dept26, actMonths);
   buildStatusChart(k.activeCount, k.reducedCount, k.cancelledCount);
   buildMonthly2026Chart(monthly26);
   buildTop5Chart(d.top5_26 || []);
@@ -950,35 +914,6 @@ function buildTop10Chart(top10) {
       scales: {
         x: { ticks: { callback: v => '$' + v.toLocaleString('en-US', { notation: 'compact' }), font: { size: 10 } }, grid: { color: 'rgba(0,0,0,.05)' } },
         y: { ticks: { font: { size: 10 } }, grid: { display: false } }
-      }
-    }
-  });
-}
-
-function buildDeptBarChart(dept25, dept26, actMonths) {
-  const depts = Object.keys(dept25).sort((a, b) => dept25[b] - dept25[a]).slice(0, 6);
-  const v25 = depts.map(d => dept25[d] || 0);
-  const v26ann = depts.map(d => (dept26[d] || 0) * (12 / actMonths));
-  new Chart(document.getElementById('deptBarChart'), {
-    type: 'bar', plugins: [ChartDataLabels],
-    data: {
-      labels: depts,
-      datasets: [
-        { label: '2025 Actual', data: v25, backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 4 },
-        { label: '2026 Annualized', data: v26ann, backgroundColor: 'rgba(34,197,94,0.7)', borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      layout: { padding: { top: 20 } },
-      plugins: {
-        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
-        tooltip: { callbacks: { label: ctx => ' $' + Math.round(ctx.raw).toLocaleString() } },
-        datalabels: { anchor: 'end', align: 'top', formatter: v => '$' + Math.round(v / 1000) + 'K', font: { size: 9 }, color: '#334155' }
-      },
-      scales: {
-        y: { ticks: { callback: v => '$' + v.toLocaleString('en-US', { notation: 'compact' }), font: { size: 10 } }, grid: { color: 'rgba(0,0,0,.05)' } },
-        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
       }
     }
   });
