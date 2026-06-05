@@ -118,7 +118,7 @@
     /* ── KPI CARDS ───────────────────────────────────────────── */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin-bottom: 32px;
     }
@@ -424,13 +424,6 @@
       <div class="kpi-delta down" id="kpi-ytd26-delta">—</div>
     </div>
 
-    <div class="kpi teal" data-icon="🗓️">
-      <div class="kpi-label">Latest Month Spend</div>
-      <div class="kpi-value" id="kpi-month">—</div>
-      <div class="kpi-sub" id="kpi-month-sub">—</div>
-      <div class="kpi-delta" id="kpi-month-delta">—</div>
-    </div>
-
     <div class="kpi amber" data-icon="📈">
       <div class="kpi-label">2026 Full-Year Projection</div>
       <div class="kpi-value" id="kpi-proj26">—</div>
@@ -524,6 +517,17 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- ═══════════════════════════════════════════ LATEST MONTH BY APP -->
+  <div class="card" style="margin-bottom:24px">
+    <div class="card-title">Latest Month Spend — by App</div>
+    <div class="card-sub" id="latestMonth-sub">—</div>
+    <div style="max-height:560px; overflow-y:auto;">
+      <div class="chart-wrap" id="latestMonth-wrap" style="height:600px">
+        <canvas id="latestMonthChart"></canvas>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════════════ SPEND PROJECTION -->
@@ -704,23 +708,6 @@ async function loadDashboard() {
   document.getElementById('kpi-proj26').textContent = fmt(proj26fixed);
   document.getElementById('kpi-cancelled').textContent = k.cancelledCount;
 
-  // Latest month spend — most recent 2026 month that has any spend
-  const MO3 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  let lastIdx = -1;
-  monthly26.forEach((v, i) => { if (v > 0) lastIdx = i; });
-  const monthExpense = lastIdx >= 0 ? monthly26[lastIdx] : 0;
-  const prevExpense  = lastIdx > 0 ? monthly26[lastIdx - 1] : 0;
-  document.getElementById('kpi-month').textContent = fmt(monthExpense);
-  document.getElementById('kpi-month-sub').textContent = lastIdx >= 0 ? (MO3[lastIdx] + ' 2026 actual') : 'no data';
-  const monthDeltaEl = document.getElementById('kpi-month-delta');
-  if (lastIdx > 0 && prevExpense > 0) {
-    const ch = monthExpense - prevExpense;
-    monthDeltaEl.textContent = (ch <= 0 ? '▼ $' : '▲ $') + Math.abs(Math.round(ch)).toLocaleString() + ' vs ' + MO3[lastIdx - 1];
-    monthDeltaEl.className = 'kpi-delta ' + (ch <= 0 ? 'down' : 'up');
-  } else {
-    monthDeltaEl.style.display = 'none';
-  }
-
   const cancelledSpend = d.apps.filter(a => a.status === 'Cancelled').reduce((s, a) => s + a.s25, 0);
   const totalApps = k.activeCount + k.reducedCount + k.cancelledCount;
   const activeTotal = k.activeCount + k.reducedCount;
@@ -823,6 +810,7 @@ async function loadDashboard() {
   buildStatusChart(k.activeCount, k.reducedCount, k.cancelledCount);
   buildMonthly2026Chart(monthly26);
   buildTop5Chart(d.top5_26 || []);
+  buildLatestMonthChart(d.latestMonth);
 
   // ── Table ─────────────────────────────────────────────────────────
   filterTable();
@@ -1024,6 +1012,40 @@ function buildTop5Chart(top5) {
       scales: {
         y: { ticks: { callback: v => '$' + v.toLocaleString('en-US', { notation: 'compact' }), font: { size: 10 } }, grid: { color: 'rgba(0,0,0,.05)' } },
         x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+function buildLatestMonthChart(lm) {
+  const sub = document.getElementById('latestMonth-sub');
+  if (!lm || !lm.apps || !lm.apps.length) {
+    if (sub) sub.textContent = 'Per-app monthly data not available yet (redeploy the data feed).';
+    return;
+  }
+  const names = lm.apps.map(a => a.name);
+  const vals  = lm.apps.map(a => a.value);
+  const total = vals.reduce((s, v) => s + v, 0);
+  sub.textContent = lm.label + ' 2026 · $' + Math.round(total).toLocaleString() + ' across ' + names.length + ' apps';
+  // Grow the canvas so every app gets a readable row.
+  document.getElementById('latestMonth-wrap').style.height = Math.max(240, names.length * 24 + 60) + 'px';
+  new Chart(document.getElementById('latestMonthChart'), {
+    type: 'bar', plugins: [ChartDataLabels],
+    data: {
+      labels: names,
+      datasets: [{ label: lm.label + ' spend', data: vals, backgroundColor: names.map((_, i) => `hsla(${205 + i * 5},70%,55%,0.85)`), borderRadius: 4 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      layout: { padding: { right: 64 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ' $' + ctx.raw.toLocaleString() } },
+        datalabels: { anchor: 'end', align: 'right', formatter: v => '$' + Math.round(v).toLocaleString(), font: { size: 9 }, color: '#334155' }
+      },
+      scales: {
+        x: { ticks: { callback: v => '$' + v.toLocaleString('en-US', { notation: 'compact' }), font: { size: 10 } }, grid: { color: 'rgba(0,0,0,.05)' } },
+        y: { ticks: { font: { size: 9 }, autoSkip: false }, grid: { display: false } }
       }
     }
   });
