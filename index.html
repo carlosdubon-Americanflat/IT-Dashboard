@@ -481,12 +481,14 @@
 
   </div>
 
-  <!-- ════════════════════════════════════════════════════ TOP APPS -->
+  <!-- ═══════════════════════════════════════════ LATEST MONTH BY APP -->
   <div class="card" style="margin-bottom:24px">
-    <div class="card-title">Top 10 Applications — 2025 Spend</div>
-    <div class="card-sub">Full year 2025 actual spend</div>
-    <div class="chart-wrap" style="height:300px">
-      <canvas id="top10Chart"></canvas>
+    <div class="card-title">Latest Month Spend — by App</div>
+    <div class="card-sub" id="latestMonth-sub">—</div>
+    <div style="max-height:560px; overflow-y:auto;">
+      <div class="chart-wrap" id="latestMonth-wrap" style="height:600px">
+        <canvas id="latestMonthChart"></canvas>
+      </div>
     </div>
   </div>
 
@@ -519,14 +521,12 @@
 
   </div>
 
-  <!-- ═══════════════════════════════════════════ LATEST MONTH BY APP -->
+  <!-- ════════════════════════════════════════════════════ TOP APPS -->
   <div class="card" style="margin-bottom:24px">
-    <div class="card-title">Latest Month Spend — by App</div>
-    <div class="card-sub" id="latestMonth-sub">—</div>
-    <div style="max-height:560px; overflow-y:auto;">
-      <div class="chart-wrap" id="latestMonth-wrap" style="height:600px">
-        <canvas id="latestMonthChart"></canvas>
-      </div>
+    <div class="card-title">Top 10 Applications — 2025 Spend</div>
+    <div class="card-sub">Full year 2025 actual spend</div>
+    <div class="chart-wrap" style="height:300px">
+      <canvas id="top10Chart"></canvas>
     </div>
   </div>
 
