@@ -1020,7 +1020,9 @@ function buildTop5Chart(top5) {
 function buildLatestMonthChart(lm) {
   const sub = document.getElementById('latestMonth-sub');
   if (!lm || !lm.apps || !lm.apps.length) {
-    if (sub) sub.textContent = 'Per-app monthly data not available yet (redeploy the data feed).';
+    if (sub) sub.textContent = 'Per-app monthly data not available yet — redeploy the Apps Script data feed to populate this chart.';
+    const w = document.getElementById('latestMonth-wrap');
+    if (w) w.style.height = '0px';   // collapse the empty canvas area
     return;
   }
   const names = lm.apps.map(a => a.name);
