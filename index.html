@@ -420,7 +420,7 @@
     <div class="kpi green" data-icon="📅">
       <div class="kpi-label">2026 YTD Spend</div>
       <div class="kpi-value" id="kpi-ytd26">—</div>
-      <div class="kpi-sub" id="kpi-ytd26-sub">actual spend</div>
+      <div class="kpi-sub" id="kpi-ytd26-sub">estimated spend</div>
       <div class="kpi-delta down" id="kpi-ytd26-delta">—</div>
     </div>
 
@@ -446,7 +446,7 @@
     <div class="save-card green">
       <div class="save-label">YTD Spend Reduction</div>
       <div class="save-value" id="save-monthly">—</div>
-      <div class="save-sub" id="save-monthly-sub">Actual 2025 vs 2026, same months</div>
+      <div class="save-sub" id="save-monthly-sub">Actual 2025 vs estimated 2026, same months</div>
     </div>
     <div class="save-card amber">
       <div class="save-label">Apps Streamlined</div>
@@ -466,7 +466,7 @@
 
     <div class="card">
       <div class="card-title">Monthly Spend — 2025 vs. 2026</div>
-      <div class="card-sub">2025 full year actuals · 2026 actuals (dashed = 2026 projection)</div>
+      <div class="card-sub">2025 full year actuals · 2026 estimates (dashed = 2026 projection)</div>
       <div class="chart-wrap" style="height:280px">
         <canvas id="trendChart"></canvas>
       </div>
@@ -474,7 +474,7 @@
 
     <div class="card">
       <div class="card-title">2026 YTD Spend by Department</div>
-      <div class="card-sub" id="deptPie-sub">YTD 2026 actual</div>
+      <div class="card-sub" id="deptPie-sub">YTD 2026 estimated</div>
       <div class="chart-wrap" style="height:280px">
         <canvas id="deptPieChart"></canvas>
       </div>
@@ -506,7 +506,7 @@
 
     <div class="card">
       <div class="card-title">2026 Monthly Spend Breakdown</div>
-      <div class="card-sub">Actual spend by month, 2026</div>
+      <div class="card-sub">Estimated spend by month, 2026</div>
       <div class="chart-wrap" style="height:240px">
         <canvas id="monthly2026Chart"></canvas>
       </div>
@@ -514,7 +514,7 @@
 
     <div class="card">
       <div class="card-title">Top 5 Active Apps — 2026 YTD</div>
-      <div class="card-sub">Highest actual spend 2026</div>
+      <div class="card-sub">Highest estimated spend 2026</div>
       <div class="chart-wrap" style="height:240px">
         <canvas id="top5_2026Chart"></canvas>
       </div>
@@ -547,11 +547,11 @@
       </div>
       <div class="proj-row">
         <div class="proj-meta">
-          <span class="proj-name">2026 YTD Actual</span>
+          <span class="proj-name">2026 YTD Estimated</span>
           <span class="proj-amt" id="proj-ytd-amt">—</span>
         </div>
         <div class="proj-track"><div class="proj-fill" id="proj-ytd-fill" style="width:0%;background:#22c55e;"></div></div>
-        <div class="proj-sub" id="proj-ytd-pct">4 of 12 months completed</div>
+        <div class="proj-sub" id="proj-ytd-pct">4 of 12 months estimated</div>
       </div>
       <div class="proj-row">
         <div class="proj-meta">
@@ -595,6 +595,7 @@
         <option value="Design">Design</option>
         <option value="IT">IT</option>
         <option value="Data Team">Data Team</option>
+        <option value="Sales">Sales</option>
       </select>
       <select class="filter-select" id="statusFilter" onchange="filterTable()">
         <option value="">All Statuses</option>
@@ -654,6 +655,7 @@ const DEPT_COLORS = {
   'Design':     '#14b8a6',
   'IT':         '#64748b',
   'Data Team':  '#f97316',
+  'Sales':      '#ec4899',
   'Other':      '#94a3b8',
 };
 
@@ -719,10 +721,10 @@ async function loadDashboard() {
   const activeTotal = k.activeCount + k.reducedCount;
 
   document.getElementById('kpi-total25-sub').textContent = totalApps + ' tracked apps · full year actual';
-  document.getElementById('kpi-ytd26-sub').textContent = activeTotal + ' active apps · ' + actMonths + ' months actual';
+  document.getElementById('kpi-ytd26-sub').textContent = activeTotal + ' active apps · ' + actMonths + ' months estimated';
   document.getElementById('kpi-proj26-sub').textContent = 'Based on $33,000/mo for remaining ' + (12 - actMonths) + ' months';
   if (lastIdx >= 0) {
-    document.getElementById('kpi-month-sub').textContent = MO3[lastIdx] + ' 2026 actual';
+    document.getElementById('kpi-month-sub').textContent = MO3[lastIdx] + ' 2026 estimated';
     const md = document.getElementById('kpi-month-delta');
     const prevM = lastIdx > 0 ? monthly26[lastIdx - 1] : 0;
     if (prevM > 0) {
@@ -763,11 +765,11 @@ async function loadDashboard() {
   document.getElementById('proj-2025-sub').textContent = 'Baseline — ' + totalApps + ' apps · 12 months';
   document.getElementById('proj-ytd-amt').textContent = fmt(k.ytd26);
   document.getElementById('proj-full-amt').textContent = fmt(proj26fixed);
-  document.getElementById('proj-card-sub').textContent = 'Projection based on $33,000/month for remaining ' + (12 - actMonths) + ' months (' + actMonths + ' months actual)';
+  document.getElementById('proj-card-sub').textContent = 'Projection based on $33,000/month for remaining ' + (12 - actMonths) + ' months (' + actMonths + ' months estimated)';
 
   const ytdPct = (k.ytd26 / baseline * 100);
   document.getElementById('proj-ytd-fill').style.width = Math.min(ytdPct, 100).toFixed(1) + '%';
-  document.getElementById('proj-ytd-pct').textContent = ytdPct.toFixed(1) + '% of 2025 baseline · ' + actMonths + ' of 12 months completed';
+  document.getElementById('proj-ytd-pct').textContent = ytdPct.toFixed(1) + '% of 2025 baseline · ' + actMonths + ' of 12 months estimated';
 
   const projPct = (proj26fixed / baseline * 100);
   document.getElementById('proj-full-fill').style.width = Math.min(projPct, 100).toFixed(1) + '%';
@@ -816,7 +818,7 @@ async function loadDashboard() {
 
   // ── Dept pie subtitle ─────────────────────────────────────────────
   const ytdTotal = Object.values(dept26).reduce((s, v) => s + v, 0);
-  document.getElementById('deptPie-sub').textContent = 'YTD 2026 actual ($' + Math.round(ytdTotal).toLocaleString() + ' total)';
+  document.getElementById('deptPie-sub').textContent = 'YTD 2026 estimated ($' + Math.round(ytdTotal).toLocaleString() + ' total)';
 
   // ── Build all charts ──────────────────────────────────────────────
   buildTrendChart(monthly25, monthly26, 33000, actMonths);
@@ -865,7 +867,7 @@ function buildTrendChart(data25, data26, avg26, actMonths) {
           }
         },
         {
-          type: 'line', label: '2026 Actual', data: data26Act,
+          type: 'line', label: '2026 Estimated', data: data26Act,
           borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.1)',
           borderWidth: 3, pointRadius: 5, pointBackgroundColor: '#22c55e',
           fill: false, tension: 0.3, spanGaps: false, yAxisID: 'y',
@@ -983,7 +985,7 @@ function buildMonthly2026Chart(monthly26) {
     type: 'bar', plugins: [ChartDataLabels],
     data: {
       labels,
-      datasets: [{ label: 'Actual Spend', data: actData, backgroundColor: actData.map((_, i) => monthColors[i] || 'rgba(34,197,94,0.8)'), borderRadius: 6 }]
+      datasets: [{ label: 'Estimated Spend', data: actData, backgroundColor: actData.map((_, i) => monthColors[i] || 'rgba(34,197,94,0.8)'), borderRadius: 6 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
