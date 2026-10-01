@@ -338,6 +338,17 @@
       vertical-align: middle;
     }
     tr:hover td { background: var(--slate-50); }
+    /* Monthly breakdown table */
+    #mbTable td, #mbTable th { white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+    #mbTable td:first-child, #mbTable th:first-child { text-align: left; position: sticky; left: 0; background: var(--white); z-index: 1; }
+    #mbTable tr.mb-dept td { background: var(--slate-100); font-weight: 700; color: var(--slate-900); }
+    #mbTable tr.mb-grand td { background: var(--slate-900); color: var(--white); font-weight: 700; }
+    #mbTable tr:hover td:first-child { background: var(--slate-50); }
+    #mbTable tr.mb-dept:hover td { background: var(--slate-100); }
+    #mbTable tr.mb-grand:hover td { background: var(--slate-900); }
+    #mbTable .mb-zero { color: var(--slate-300); }
+    #mbTable .mb-up { color: var(--red); font-weight: 600; }
+    #mbTable .mb-down { color: var(--green); font-weight: 600; }
     td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
     td.savings-pos { color: var(--green); text-align: right; font-weight: 600; }
     td.savings-neg { color: var(--red); text-align: right; font-weight: 600; }
@@ -578,6 +589,34 @@
         <div class="proj-sub" id="proj-dept2-sub">YTD × 3 annualized</div>
       </div>
     </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ MONTHLY BREAKDOWN -->
+  <div id="mb-section" style="display:none">
+  <div class="section-title">Monthly Breakdown — by App</div>
+  <div class="table-card" style="margin-bottom:24px">
+    <div class="table-controls">
+      <input type="text" class="search-input" id="mbSearch" placeholder="🔍  Search by application name…" oninput="renderMonthlyBreakdown()" />
+      <select class="filter-select" id="mbDept" onchange="renderMonthlyBreakdown()">
+        <option value="">All Departments</option>
+      </select>
+      <select class="filter-select" id="mbShow" onchange="renderMonthlyBreakdown()">
+        <option value="spend">Apps with 2026 spend</option>
+        <option value="changed">Changed vs prior month</option>
+        <option value="all">All apps</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table id="mbTable">
+        <thead><tr id="mbHead"></tr></thead>
+        <tbody id="mbBody"></tbody>
+      </table>
+    </div>
+    <div class="table-footer">
+      <span id="mbCount">—</span>
+      <span>2026 estimated spend · change = latest month vs prior month</span>
+    </div>
+  </div>
   </div>
 
   <!-- ═══════════════════════════════════════════════ APP TABLE -->
@@ -828,6 +867,7 @@ async function loadDashboard() {
   buildMonthly2026Chart(monthly26);
   buildTop5Chart(d.top5_26 || []);
   buildLatestMonthChart(d.latestMonth);
+  initMonthlyBreakdown(d.monthlyByApp);
 
   // ── Table ─────────────────────────────────────────────────────────
   filterTable();
@@ -1187,6 +1227,83 @@ function buildHighlights(d) {
 }
 
 // ═══════════════════════════════════════════════════ INIT
+// ═══════════════════════════════════════════════════ MONTHLY BREAKDOWN
+let mbData = null;
+const DEPT_ORDER = ['AMF','Operations','Finance','AMZ Sales','Sales','Design','Data Team','IT','HR'];
+
+function initMonthlyBreakdown(mb) {
+  if (!mb || !mb.months || !mb.months.length || !mb.rows || !mb.rows.length) return;  // feed not updated yet
+  mbData = mb;
+  const depts = [...new Set(mb.rows.map(r => r.dept))]
+    .sort((a, b) => (DEPT_ORDER.indexOf(a) + 1 || 99) - (DEPT_ORDER.indexOf(b) + 1 || 99));
+  const sel = document.getElementById('mbDept');
+  depts.forEach(d => { const o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o); });
+  document.getElementById('mbHead').innerHTML =
+    '<th>Application</th>' + mb.months.map(m => `<th>${m}</th>`).join('') +
+    '<th>2026 Total</th><th>Change</th>';
+  document.getElementById('mb-section').style.display = '';
+  renderMonthlyBreakdown();
+}
+
+function mbCell(v) {
+  if (!v) return '<td class="mb-zero">–</td>';
+  return '<td>' + fmtFull(v) + '</td>';
+}
+
+function mbChange(vals) {
+  const n = vals.length;
+  if (n < 2) return { v: 0, html: '<td class="mb-zero">–</td>' };
+  const v = Math.round((vals[n - 1] - vals[n - 2]) * 100) / 100;
+  if (Math.abs(v) < 0.5) return { v: 0, html: '<td class="mb-zero">–</td>' };
+  const cls = v > 0 ? 'mb-up' : 'mb-down';
+  return { v, html: `<td class="${cls}">${v > 0 ? '▲ +' : '▼ −'}$${Math.abs(Math.round(v)).toLocaleString('en-US')}</td>` };
+}
+
+function sumCols(rows, n) {
+  const t = new Array(n).fill(0);
+  rows.forEach(r => r.values.forEach((v, i) => { t[i] += v; }));
+  return t;
+}
+
+function mbRowHtml(label, vals, cls) {
+  const total = vals.reduce((s, v) => s + v, 0);
+  return `<tr class="${cls || ''}"><td>${label}</td>` + vals.map(mbCell).join('') +
+         `<td>${total ? fmtFull(total) : '–'}</td>` + mbChange(vals).html + '</tr>';
+}
+
+function renderMonthlyBreakdown() {
+  if (!mbData) return;
+  const q    = document.getElementById('mbSearch').value.trim().toLowerCase();
+  const dp   = document.getElementById('mbDept').value;
+  const show = document.getElementById('mbShow').value;
+  const n    = mbData.months.length;
+
+  const rows = mbData.rows.filter(r => {
+    if (dp && r.dept !== dp) return false;
+    if (q && !r.name.toLowerCase().includes(q)) return false;
+    const total = r.values.reduce((s, v) => s + v, 0);
+    if (show === 'spend' && !total) return false;
+    if (show === 'changed' && !mbChange(r.values).v) return false;
+    return true;
+  });
+
+  const byDept = {};
+  rows.forEach(r => { (byDept[r.dept] = byDept[r.dept] || []).push(r); });
+  const depts = Object.keys(byDept)
+    .sort((a, b) => (DEPT_ORDER.indexOf(a) + 1 || 99) - (DEPT_ORDER.indexOf(b) + 1 || 99));
+
+  let html = '';
+  depts.forEach(d => {
+    const list = byDept[d].sort((a, b) => b.values[n - 1] - a.values[n - 1] || a.name.localeCompare(b.name));
+    html += mbRowHtml(d, sumCols(list, n), 'mb-dept');
+    list.forEach(r => { html += mbRowHtml(r.name, r.values); });
+  });
+  if (rows.length) html += mbRowHtml('Total', sumCols(rows, n), 'mb-grand');
+  document.getElementById('mbBody').innerHTML = html ||
+    `<tr><td colspan="${n + 3}" style="text-align:center;color:var(--slate-500)">No applications match your filters.</td></tr>`;
+  document.getElementById('mbCount').textContent = rows.length + (rows.length === 1 ? ' app · ' : ' apps · ') + depts.length + (depts.length === 1 ? ' department' : ' departments');
+}
+
 loadDashboard();
 </script>
 </body>
